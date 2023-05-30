@@ -39,7 +39,7 @@ namespace DedInfoservices.Models
         [Column("dtc_ultimo_acesso")]
         public DateTime? Dtc_Ultimo_Acesso { get; set; }
 
-        [Column("perfil")]
-        public PerfilEnum Perfil { get; set; }
+        [Column("ide_perfil")]
+        public PerfilEnum Ide_Perfil { get; set; }
     }
 }
