@@ -355,3 +355,5 @@ D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\DedInfoservices.dll
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\ref\DedInfoservices.dll
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\DedInfoservices.pdb
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\DedInfoservices.genruntimeconfig.cache
+D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Login\Index.cshtml.g.cs
+D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Shared\_LayoutLogin.cshtml.g.cs
