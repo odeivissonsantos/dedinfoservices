@@ -23,7 +23,8 @@ div.center-form > form {
 .background-image-login {
     background-image: url('/images/logo1.jpeg');
     background-size: cover;
-    background-repeat: no-repeat;   
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .titulo-login {
@@ -36,4 +37,8 @@ div.center-form > form {
     border: 50px solid rgb(255 255 255 / 20%);
     border-radius: 31px;
     background: rgb(255 255 255/ 90%);
+}
+
+.voltar {
+    text-align:center;
 }

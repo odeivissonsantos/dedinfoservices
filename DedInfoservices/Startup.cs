@@ -1,4 +1,5 @@
 using DedInfoservices.Context;
+using DedInfoservices.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +29,8 @@ namespace DedInfoservices
             services.AddControllersWithViews();
             services.AddEntityFrameworkSqlServer()
                 .AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ConnectionStringDesenvolvimento")));
+
+            services.AddScoped<Email>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

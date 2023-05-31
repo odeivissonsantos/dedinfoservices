@@ -1,8 +1,7 @@
 ﻿@{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Recuperaçao de Senha";
     Layout = "_LayoutLogin";
 }
-
 
 <div class="center-form background-image-login">
     <form class="card">
@@ -35,16 +34,12 @@
         </div>
 
         <div class="form-group">
-            <label for="senha">Senha</label>
-            <input type="password" class="form-control" id="senha" name="senha" placeholder="digite a senha">
+            <button class="btn btn-success" id="btn-entrar" onclick="EsqueceuSenha();">Recuperar</button>
         </div>
 
-        <div class="form-group">
-            Esqueceu a senha? <a href="@Url.Action("RecuperacaoDeSenha", "Login")">Clique aqui!</a>
-        </div>
 
-        <div class="form-group">
-            <button class="btn btn-success" id="btn-entrar" onclick="Logar();">Entrar</button>
+        <div class="form-group voltar">
+            <a href="@Url.Action("Index", "Login")">Voltar</a>
         </div>
 
     </form>
@@ -52,27 +47,23 @@
 
 <script>
 
-    function Logar() {
+    function EsqueceuSenha() {
         let email = $('#email').val();
-        let senha = $('#senha').val();
         $('#msgError #erroMsg').html();
         $('#item_form #msgError').hide();
         $.ajax({
             type: 'POST',
             data: {
                 'email': email,
-                'senha': senha,
             },
-            url: '@Url.Action("Logar", "Login")',
+            url: '@Url.Action("EsqueceuSenha", "Login")',
             success: function (result) {
                 if (result.is_action) {
                     $('.overlay').hide();
                     $('#errorModal').hide();
-                    $('#msgSucess #sucessMsg').html('Login efetuado com sucesso!!!');
+                    $('#msgSucess #sucessMsg').html('Nova senha enviada com sucesso!!!');
                     $('#sucessModal').show();
                     $('#email').val('');
-                    $('#senha').val('');
-                    window.location.href = '@Url.Action("Index", "Home")';
                 }
                 else
                 {
@@ -96,6 +87,3 @@
 
 
 </script>
-
-
-

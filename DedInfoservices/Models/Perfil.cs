@@ -8,7 +8,7 @@ namespace DedInfoservices.Models
     {
         [Key]
         [Column("ide_perfil")]
-        public long Ide_Perfil { get; set; }
+        public int Ide_Perfil { get; set; }
 
         [Column("nome")]
         public string Nome { get; set; }
