@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>D:\publish\dedinfoservices</_PublishTargetUrl>
+    <History>True|2023-05-30T22:15:23.7003342Z;True|2023-05-30T18:45:26.2236505-03:00;</History>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="ConnectionStringDesenvolvimento">
+      <Value>Data Source=%28localdb%29\mssqllocaldb%3bInitial Catalog=db_dedinfoservices%3bPersist Security Info=True%3bMultipleActiveResultSets=true%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>
