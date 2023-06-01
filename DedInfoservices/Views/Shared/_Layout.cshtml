@@ -1,45 +1,87 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var controllerName = ViewContext.HttpContext.Request.RouteValues["Controller"]?.ToString();
+    var actionName = ViewContext.HttpContext.Request.RouteValues["action"]?.ToString();
+}
+
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - DedInfoservices</title>
+    <title>@ViewData["Title"] - DeD Infoservices</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DedInfoservices</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-light bg-light fixed-top">
+            <div class="container-fluid">
+                @*<a class="navbar-brand" href="#">Offcanvas navbar</a>*@
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+                <a href="@Url.Action("Index","Home")">
+                    <img src="/images/logo_menu.svg" alt="logo-detran" style="width: 10rem;"/>
+                </a>
+                <h6 class="offcanvas-title" id="offcanvasNavbarLabel">POWER BI- <strong>MAGO</strong></h6>
+
+                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <a href="@Url.Action("Index","Home")">
+                            <img src="/images/logo_menu.svg" alt="logo" style="width: 10rem;" />
+                        </a>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+
+                    <hr>
+
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <div class="nav-link @(actionName.ToUpper() == "INDEX" ? "active" : string.Empty)" aria-current="page">
+                                    <a href="@Url.Action("Index", "Home")"><i class="fa-solid fa-address-book p-3"></i>Renach</a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item mt-3">
+                                <div class="nav-link @(actionName.ToUpper() == "RENAVAM" ? "active" : string.Empty)">
+                                    <a href="@Url.Action("Renavam", "Home")"><i class="fa-solid fa-car p-3"></i>Renavam</a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item mt-3">
+                                <div class="nav-link @(actionName.ToUpper() == "RENAIF" ? "active" : string.Empty)">
+                                    <a href="@Url.Action("RenaIf", "Home")"><i class="fa-solid fa-layer-group p-3"></i>RenaIf</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bottom-content">
+                        <ul class="nav-item fixed-bottom">
+                            <li class="nav-link">
+                                <a href="@Url.Action("Index", "Login")"><i class="fa-solid fa-layer-group p-3"></i>RenaIf</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3 pt-6">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - DedInfoservices - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer bg-light">
+        <div class="footer-content justify-content-between">
+            <span>&copy; 2023 - Portal - MAGO</span>
         </div>
     </footer>
+
+    <script src="https://kit.fontawesome.com/d7209917e5.js" crossorigin="anonymous"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
