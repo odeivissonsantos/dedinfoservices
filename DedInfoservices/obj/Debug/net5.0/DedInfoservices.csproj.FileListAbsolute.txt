@@ -338,7 +338,6 @@ D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\DedInfoservices.Tag
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\DedInfoservices.TagHelpers.output.cache
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\DedInfoservices.RazorCoreGenerate.cache
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Home\Index.cshtml.g.cs
-D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Home\Privacy.cshtml.g.cs
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Shared\_Layout.cshtml.g.cs
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\_ViewImports.cshtml.g.cs
@@ -387,3 +386,6 @@ D:\PROJETOS\dedinfoservices\DedInfoservices\bin\Debug\net5.0\runtimes\win\lib\ne
 D:\PROJETOS\dedinfoservices\DedInfoservices\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Login\RecuperacaoDeSenha.cshtml.g.cs
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\DedInfoservices.csproj.AssemblyReference.cache
+D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Cliente\Index.cshtml.g.cs
+D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Produto\Index.cshtml.g.cs
+D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Usuario\Index.cshtml.g.cs
