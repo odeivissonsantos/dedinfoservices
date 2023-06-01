@@ -1,4 +1,6 @@
-﻿using DedInfoservices.Models;
+﻿using DedInfoservices.Filters.Usuario;
+using DedInfoservices.Models;
+using DedInfoservices.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,38 +13,29 @@ namespace DedInfoservices.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly UsuarioService _usuarioService;
+
+        public HomeController(UsuarioService usuarioService)
+        {
+            _usuarioService = usuarioService;
+        }
+
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Sair()
+        public IActionResult AlterarSenha(AlterarSenhaFilter filter)
         {
             string error = "";
             bool is_action = false;
 
             try
             {
-                is_action = true;
-            }
-            catch (Exception ex)
-            {
-                error = ex.Message;
-            }
+                if (filter.NovaSenha != filter.ConfirmarSenha) throw new Exception("Nova senha é diferente da senha de confirmação.");
 
-            return Json(new { is_action, error });
-        }
-
-        [HttpPost]
-        public IActionResult AlterarSenha(string SenhaAtual, string NovaSenha, string ConfirmarSenha)
-        {
-            string error = "";
-            bool is_action = false;
-
-            try
-            {
-                if (NovaSenha != ConfirmarSenha) throw new Exception("Nova senha é diferente da senha de confirmação.");
+                
                 //if (usuario.Senha == Hash.SHA512(SenhaAtual))
                 //{
                 //    if (NovaSenha == ConfirmarSenha)

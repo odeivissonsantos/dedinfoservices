@@ -100,6 +100,23 @@ namespace DedInfoservices.Controllers
             return Json(new { is_action, error });
         }
 
+        [HttpPost]
+        public IActionResult Sair()
+        {
+            string error = "";
+            bool is_action = false;
+
+            try
+            {
+                is_action = true;
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+            }
+
+            return Json(new { is_action, error });
+        }
 
 
 
