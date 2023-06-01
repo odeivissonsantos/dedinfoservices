@@ -19,24 +19,16 @@
                     <span id="erroMsg"></span>
                 </div>
             </div>
-            <div id="sucessModal" style="display: none">
-                <div id="msgSucess" class="alert alert-success">
-                    <i class="fa fa-ban"></i>
-                    <button class="close" onclick="fechar_alerta();" aria-hidden="true" type="button">×</button>
-
-                    <span id="sucessMsg"></span>
-                </div>
-            </div>
         </div>
 
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="login@login.com.br">
+            <input type="email" class="form-control" id="email" placeholder="login@login.com.br">
         </div>
 
         <div class="form-group">
             <label for="senha">Senha</label>
-            <input type="password" class="form-control" id="senha" name="senha" placeholder="digite a senha">
+            <input type="password" class="form-control" id="senha" placeholder="digite a senha">
         </div>
 
         <div class="form-group">
@@ -44,19 +36,21 @@
         </div>
 
         <div class="form-group">
-            <button class="btn btn-success" id="btn-entrar" onclick="Logar();">Entrar</button>
+            <button class="btn btn-success" type="button" id="btn-entrar" onclick="Logar();">Entrar</button>
         </div>
 
     </form>
 </div>
 
-<script>
+<script type="text/javascript">
 
     function Logar() {
+
+        fechar_alerta();
+
         let email = $('#email').val();
         let senha = $('#senha').val();
-        $('#msgError #erroMsg').html();
-        $('#item_form #msgError').hide();
+
         $.ajax({
             type: 'POST',
             data: {
@@ -66,23 +60,16 @@
             url: '@Url.Action("Logar", "Login")',
             success: function (result) {
                 if (result.is_action) {
-                    $('.overlay').hide();
-                    $('#errorModal').hide();
-                    $('#msgSucess #sucessMsg').html('Login efetuado com sucesso!!!');
-                    $('#sucessModal').show();
-                    $('#email').val('');
-                    $('#senha').val('');
                     window.location.href = '@Url.Action("Index", "Home")';
                 }
                 else
                 {
                     $('#msgError #erroMsg').html(result.error);
                     $('#errorModal').show();
-                    $('#sucessModal').hide();
                 }
             },
             error: function (error) {
-                $('#msgError #erroMsg').html(result.error);
+                $('#msgError #erroMsg').html(error);
                 $('#errorModal').show();
             },
             datatype: 'json'
@@ -91,7 +78,6 @@
 
     function fechar_alerta() {
         $('#errorModal').hide();
-        $('#sucessModal').hide();
     }
 
 
