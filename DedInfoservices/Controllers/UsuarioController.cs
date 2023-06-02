@@ -1,4 +1,6 @@
-﻿using DedInfoservices.Filters.Usuario;
+﻿using DedInfoservices.Enums;
+using DedInfoservices.Filters.Usuario;
+using DedInfoservices.Models;
 using DedInfoservices.Services;
 using DedInfoservices.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +25,41 @@ namespace DedInfoservices.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+
+        [HttpPost]
+        public virtual IActionResult UsuariosPagination(string sEcho, int iDisplayStart, int iColumns, int iDisplayLength, string sSearch)
+        {
+
+            IEnumerable<Usuario> query = _usuarioService.ListarTodos();
+
+            if (!string.IsNullOrEmpty(sSearch)) query = query.Where(x => x.Nome.ToLower()
+                .Contains(SpecialCharacters.RemoveSpecialCharacters(sSearch).ToLower())).AsQueryable();
+
+            int recordsTotal = query.Count();
+
+            List<Usuario> aList = query.OrderBy(x => x.Nome).Skip(iDisplayStart).Take(iDisplayLength).ToList();
+
+            var data = aList.Select(x => new
+            {
+                nome = $"{x.Nome} {x.Sobrenome}" ,
+                perfil = DescriptionEnum.GetEnumDescription((PerfilEnum)x.Ide_Perfil),
+                data_cadastro = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),
+                qtd_acessos = x.Qtd_Acessos,
+                data_ultimo_acesso = x.Dtc_Ultimo_Acesso.HasValue ? x.Dtc_Ultimo_Acesso.Value.ToString("dd/MM/yyy HH:mm") : "",
+                acao = x.Sts_Exclusao == true ? $"<a href='#' type='button' class='btn btn-primary' onclick='reativar({x.Guid})'>Ativar</a>" : $"<a href='#' type='button' class='btn btn-danger' onclick='desativar({x.Guid})'>Desativar</a>"
+            }).ToArray();
+
+            return Json(new
+            {
+                iDraw = 1,
+                sEcho,
+                iTotalRecords = recordsTotal,
+                iTotalDisplayRecords = recordsTotal,
+                aaData = data
+            });
+
         }
 
         [HttpPost]

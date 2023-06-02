@@ -5,6 +5,66 @@
 
 
 <section>
+    <div class="text-center container">
+        <br />
+        <h2>Usuários</h2>
+        <br />
+
+        <table id="list_items" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Perfil</th>
+                    <th>Data Cadastro</th>
+                    <th>Qtd. Acessos</th>
+                    <th>Último Acesso</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th>Nome</th>
+                    <th>Perfil</th>
+                    <th>Data Cadastro</th>
+                    <th>Qtd. Acessos</th>
+                    <th>Último Acesso</th>
+                    <th>Ação</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 
 
 </section>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        listar();
+    });
+
+    function listar() {
+        $('#list_items').dataTable({
+            'bPaginate': true,
+            'bJQueryUI': true,
+            'bProcessing': true,
+            'bServerSide': true,
+            "searching": true,
+            'bDestroy': true,
+            'sAjaxSource': `@Url.Action("UsuariosPagination", "Usuario")`,
+            'sServerMethod': 'POST',
+            'aoColumns': [
+                { 'mData': 'nome' },
+                { 'mData': 'perfil' },
+                { 'mData': 'data_cadastro' },
+                { 'mData': 'qtd_acessos' },
+                { 'mData': 'data_ultimo_acesso' },
+                { 'mData': 'acao' },
+            ],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
+            }
+        });
+    };
+</script>

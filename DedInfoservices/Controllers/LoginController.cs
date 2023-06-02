@@ -47,6 +47,11 @@ namespace DedInfoservices.Controllers
 
                 if(senhaEncryptada != query.Senha) throw new Exception("Email/Senha inválido. Por favor, tente novamente.");
 
+                query.Qtd_Acessos++;
+                query.Dtc_Ultimo_Acesso = DateTime.Now;
+
+                _context.Usuario.Update(query);
+                _context.SaveChanges();
                 is_action = true;
 
             }

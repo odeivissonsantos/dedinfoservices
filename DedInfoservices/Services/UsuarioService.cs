@@ -20,6 +20,11 @@ namespace DedInfoservices.Services
             _email = email;
         }
 
+        public List<Usuario> ListarTodos()
+        {
+            return _context.Usuario.ToList();
+        }
+
         public void SalvarUsuario(SalvarUsuarioFilter filter)
         {
             bool novo = true;
