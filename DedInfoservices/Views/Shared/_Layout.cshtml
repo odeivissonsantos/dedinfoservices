@@ -30,7 +30,7 @@
 
                 <div class="btn-group dropstart">
                     <button type="button" class="btn btn-info dropdown-toggle offcanvas-title" data-bs-toggle="dropdown" aria-expanded="false" id="offcanvasNavbarLabel">
-                        <strong>NOME USUÁRIO</strong>
+                        <strong><span id="current_user"></span></strong>
                     </button>
                     <ul class="dropdown-menu">
                         <li><button class="dropdown-item" type="button" onclick="modalAlterarsenha();">Alterar Senha</button></li>
@@ -115,7 +115,7 @@
                         </div>
                         <div id="sucessModal-senha" style="display: none">
                             <div id="msgSucess-senha" class="alert alert-success alert-dismissible fade show">
-                                <i class="fa fa-ban"></i>
+                                <i class="fa fa-check"></i>
                                 <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
                                 <span id="sucessMsg-senha"></span>
                             </div>
@@ -163,7 +163,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button id="btn-confirmar-excluir" class="btn btn-success pull-right" onclick="SalvarUsuario();">Salvar</button>
+                        <button id="btn-confirmar-excluir" class="btn btn-success pull-right" onclick="AlterarSenha();">Salvar</button>
                     </div>
                 </div>
             </div>
@@ -187,6 +187,31 @@
 
 <script type="text/javascript">
 
+    $(document).ready(function () {
+        buscarNomeUsuarioLogado();
+    });
+
+    function buscarNomeUsuarioLogado() {
+        fechar_alerta();
+            $('#msgError #erroMsg').html();
+            $('#item_form #msgError').hide();
+            $.ajax({
+                type: 'POST',
+                data: {
+
+                },
+                url: '@Url.Action("BuscarNomeUsuarioLogado", "Usuario")',
+                success: function (result) {
+                    $('.overlay').hide();
+                    $('#current_user').html(result.nomeUsuarioLogado);
+                },
+                error: function (error) {
+                    $('#msgError-senha #erroMsg-senha').html(error.responseJSON.message);
+                    $('#errorModal-senha').show();
+                },
+            });
+
+    }
 
     function modalAlterarsenha() {
         $('#modal-Alterar-Senha').modal('show');
@@ -201,8 +226,12 @@
         $('#sucessModal-senha').hide();
     }
 
-    function SalvarUsuario() {
-        if ($('#NovaSenha').val() != $('#ConfirmarNovaSenha').val()) {
+    function AlterarSenha() {
+        if ($('#AlterarSenha').val() === "" || $('#NovaSenha').val() === "" || $('#ConfirmarNovaSenha').val() === "") {
+            $('#msgError-senha #erroMsg-senha').html('Campos com (*) são obrigatórios.');
+            $('#errorModal-senha').show();
+        }
+        else if ($('#NovaSenha').val() != $('#ConfirmarNovaSenha').val()) {
             $('#msgError-senha #erroMsg-senha').html('Nova senha é diferente da senha de confirmação.');
             $('#errorModal-senha').show();
         } else {
@@ -218,12 +247,18 @@
                 },
                 url: '@Url.Action("AlterarSenha", "Home")',
                 success: function (result) {
-                    $('.overlay').hide();
-                    $('#sucessMsg-senha').html('Senha modificada  com sucesso!!!');
-                    $('#sucessModal-senha').show();
-                    $('#AlterarSenha').val('');
-                    $('#NovaSenha').val('');
-                    $('#ConfirmarNovaSenha').val('');
+                    if (result.is_action) {
+                        $('.overlay').hide();
+                        $('#sucessMsg-senha').html('Senha modificada  com sucesso!!!');
+                        $('#sucessModal-senha').show();
+                        $('#AlterarSenha').val('');
+                        $('#NovaSenha').val('');
+                        $('#ConfirmarNovaSenha').val('');
+                    }
+                    else {
+                        $('#msgError-senha #erroMsg-senha').html(result.error);
+                        $('#errorModal-senha').show();
+                    }
                 },
                 error: function (error) {
                     $('#msgError-senha #erroMsg-senha').html(error.responseJSON.message);

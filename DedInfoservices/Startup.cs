@@ -1,8 +1,10 @@
 using DedInfoservices.Context;
+using DedInfoservices.Helpers;
 using DedInfoservices.Services;
 using DedInfoservices.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,15 +29,29 @@ namespace DedInfoservices
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Settings.IsDesenv = Configuration["Ambiente"] == "2"; //1 - Produção; 2 - Desenvolvimento
+
             services.AddControllersWithViews();
             services.AddEntityFrameworkSqlServer()
-                .AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ConnectionStringDesenvolvimento")));
+                .AddDbContext<DataContext>(options => options.UseSqlServer(
+                                Settings.IsDesenv ? Configuration.GetConnectionString("ConnectionStringDesenvolvimento") :
+                                                        Configuration.GetConnectionString("ConnectionStringProducao")
+                                                    ));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped<Email>();
             services.AddScoped<ClienteService>();
             services.AddScoped<LoginService>();
             services.AddScoped<ProdutoService>();
             services.AddScoped<UsuarioService>();
+            services.AddScoped<SessionHelper>();
+
+            services.AddSession(o =>
+            {
+                o.Cookie.HttpOnly = true;
+                o.Cookie.IsEssential = true;
+            });
+          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +73,7 @@ namespace DedInfoservices
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,5 +1,7 @@
 ﻿using DedInfoservices.Context;
 using DedInfoservices.Filters.Login;
+using DedInfoservices.Helpers;
+using DedInfoservices.Models;
 using DedInfoservices.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,11 +15,13 @@ namespace DedInfoservices.Controllers
     {
         private readonly DataContext _context;
         private readonly Email _email;
+        private readonly SessionHelper _sessao;
 
-        public LoginController(DataContext context, Email email)
+        public LoginController(DataContext context, Email email, SessionHelper sessao)
         {
             _context = context;
             _email = email;
+            _sessao = sessao;
         }
 
         public IActionResult Index()
@@ -35,23 +39,27 @@ namespace DedInfoservices.Controllers
         {
             string error = "";
             bool is_action = false;
+            Usuario usuario = new();
 
             try
             {
-                var query = _context.Usuario.Where(x => x.Email == filter.Email).FirstOrDefault();
+                usuario = _context.Usuario.Where(x => x.Email == filter.Email).FirstOrDefault();
 
-                if (query == null) throw new Exception("Email/Senha inválido. Por favor, tente novamente.");
-                if (query.Sts_Exclusao) throw new Exception("Usuário não tem mais acesso ao sistema");
+                if (usuario == null) throw new Exception("Email/Senha inválido. Por favor, tente novamente.");
+                if (usuario.Sts_Exclusao) throw new Exception("Usuário não tem mais acesso ao sistema");
 
                 string senhaEncryptada = Hash.SHA512(filter.Senha);
 
-                if(senhaEncryptada != query.Senha) throw new Exception("Email/Senha inválido. Por favor, tente novamente.");
+                if(senhaEncryptada != usuario.Senha) throw new Exception("Email/Senha inválido. Por favor, tente novamente.");
 
-                query.Qtd_Acessos++;
-                query.Dtc_Ultimo_Acesso = DateTime.Now;
+                _sessao.CreateCurrentUser(usuario);
 
-                _context.Usuario.Update(query);
+                usuario.Qtd_Acessos++;
+                usuario.Dtc_Ultimo_Acesso = DateTime.Now;
+
+                _context.Usuario.Update(usuario);
                 _context.SaveChanges();
+
                 is_action = true;
 
             }
@@ -60,7 +68,7 @@ namespace DedInfoservices.Controllers
                 error = ex.Message;
             }
 
-            return Json(new { is_action, error });
+            return Json(new { is_action, error, usuario });
         }
 
         [HttpPost]
@@ -113,6 +121,7 @@ namespace DedInfoservices.Controllers
 
             try
             {
+                _sessao.KillCurrentUser();
                 is_action = true;
             }
             catch (Exception ex)

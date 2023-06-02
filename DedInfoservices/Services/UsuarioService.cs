@@ -55,7 +55,7 @@ namespace DedInfoservices.Services
 
         public void AlterarSenha(AlterarSenhaFilter filter)
         {
-            var usuario = BuscarUsuario(1, "");
+            var usuario = BuscarUsuario(2, filter.Guuid);
             if (usuario == null) throw new Exception("Usuário não encontrado.");
 
             string novaSenhaEncriptada = Hash.SHA512(filter.NovaSenha);

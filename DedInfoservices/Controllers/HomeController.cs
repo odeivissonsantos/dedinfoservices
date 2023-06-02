@@ -1,4 +1,5 @@
-﻿using DedInfoservices.Filters.Usuario;
+﻿using DedInfoservices.Filters.Sessao;
+using DedInfoservices.Filters.Usuario;
 using DedInfoservices.Models;
 using DedInfoservices.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,9 @@ using System.Threading.Tasks;
 
 namespace DedInfoservices.Controllers
 {
-    public class HomeController : Controller
+    [PaginaParaUsuarioLogado]
+    [PaginaRestritaSomenteAdmin]
+    public class HomeController : BaseController
     {
         private readonly UsuarioService _usuarioService;
 
@@ -33,28 +36,16 @@ namespace DedInfoservices.Controllers
 
             try
             {
+                if(string.IsNullOrEmpty(filter.SenhaAtual)) throw new Exception("Campo Senha Atual é obrigatório.");
+                if (string.IsNullOrEmpty(filter.NovaSenha)) throw new Exception("Campo Nova Senha é obrigatório.");
+                if (string.IsNullOrEmpty(filter.ConfirmarSenha)) throw new Exception("Campo Confirmação de Nova Senha é obrigatório.");
                 if (filter.NovaSenha != filter.ConfirmarSenha) throw new Exception("Nova senha é diferente da senha de confirmação.");
 
-                
-                //if (usuario.Senha == Hash.SHA512(SenhaAtual))
-                //{
-                //    if (NovaSenha == ConfirmarSenha)
-                //    {
-                //        NovaSenha = Hash.SHA512(NovaSenha);
+                filter.Guuid = CurrentUser.Guid;
 
-                //        usuario.Senha = NovaSenha;
-                //        _contatoRepositorio.Atualizar(usuario);
-                //        return Ok(new Response<string>("", "Senha alterada com sucesso!", true));
-                //    }
-                //    else
-                //    {
-                //        return BadRequest(new Response<string>("", "Nova senha e confirmar nova senha estão diferentes,favor verificar!", false));
-                //    }
-                //}
-                //else
-                //{
-                //    return BadRequest(new Response<string>("", "Senha atual invalida, tente novamente!", false));
-                //}
+                _usuarioService.AlterarSenha(filter);
+
+                is_action = true;
             }
             catch (Exception ex)
             {

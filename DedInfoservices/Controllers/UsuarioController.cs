@@ -1,4 +1,5 @@
 ﻿using DedInfoservices.Enums;
+using DedInfoservices.Filters.Sessao;
 using DedInfoservices.Filters.Usuario;
 using DedInfoservices.Models;
 using DedInfoservices.Services;
@@ -11,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace DedInfoservices.Controllers
 {
-    public class UsuarioController : Controller
+    [PaginaRestritaSomenteAdmin]
+    public class UsuarioController : BaseController
     {
         private readonly UsuarioService _usuarioService;
         private readonly Email _email;
@@ -67,6 +69,7 @@ namespace DedInfoservices.Controllers
         {
             string error = "";
             bool is_action = false;
+            bool retornoEmail = false;
             string senhaNaoEncriptada = Guid.NewGuid().ToString().Substring(0, 8);
             string senhaEncriptada = Hash.SHA512(senhaNaoEncriptada);
 
@@ -81,16 +84,20 @@ namespace DedInfoservices.Controllers
 
             try
             {
-                filter.Guuid = Guid.NewGuid().ToString();
-                filter.Senha = senhaEncriptada;
-                _usuarioService.SalvarUsuario(filter);
-
                 if (string.IsNullOrEmpty(filter.Email)) throw new Exception("Campo Email é obrigatório.");
                 if (string.IsNullOrEmpty(filter.Nome)) throw new Exception("Campo Nome é obrigatório.");
                 if (string.IsNullOrEmpty(filter.Sobrenome)) throw new Exception("Campo Sobrenome é obrigatório.");
                 if (filter.Perfil.GetHashCode() < 1) throw new Exception("Campo Perfil é obrigatório.");
 
-                bool retornoEmail = _email.EnviarEmail(filter.Email, assunto, mensagem);
+                if (string.IsNullOrEmpty(filter.Guuid))
+                {
+                    filter.Guuid = Guid.NewGuid().ToString();
+                    filter.Senha = senhaEncriptada;
+                } 
+
+                _usuarioService.SalvarUsuario(filter);
+
+                if (string.IsNullOrEmpty(filter.Guuid)) retornoEmail = _email.EnviarEmail(filter.Email, assunto, mensagem);
                 if (!retornoEmail) throw new Exception("Não conseguimos enviar o email com a senha, Por favor, tente mais tarde.");
 
                 is_action = true;
@@ -146,6 +153,26 @@ namespace DedInfoservices.Controllers
             }
 
             return Json(new { is_action, error });
+        }
+
+        [HttpPost]
+        public IActionResult BuscarNomeUsuarioLogado()
+        {
+            string nomeUsuarioLogado = "";
+            string error = "";
+            bool is_action = false;
+
+            try
+            {
+                nomeUsuarioLogado = CurrentUser.Nome.ToUpper();
+                is_action = true;
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+            }
+
+            return Json(new { is_action, error, nomeUsuarioLogado });
         }
     }
 }

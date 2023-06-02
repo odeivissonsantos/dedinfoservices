@@ -10,6 +10,7 @@ namespace DedInfoservices.Filters.Usuario
         public string SenhaAtual { get; set; }
         public string NovaSenha { get; set; }
         public string ConfirmarSenha { get; set; }
+        public string Guuid { get; set; }
 
     }
 }
