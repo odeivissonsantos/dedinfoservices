@@ -31,7 +31,8 @@ namespace DedInfoservices.Services
             Usuario usuario = new();
 
             usuario = BuscarUsuario(1, filter.Email);
-            if (usuario.Ide_Usuario > 0) novo = false;
+            if (usuario != null) novo = false;
+            if(usuario == null) usuario = new();
 
             usuario.Nome = filter.Nome;
             usuario.Sobrenome = filter.Sobrenome;

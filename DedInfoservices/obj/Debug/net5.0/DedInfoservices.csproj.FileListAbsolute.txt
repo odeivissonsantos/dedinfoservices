@@ -389,3 +389,4 @@ D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Cliente
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Produto\Index.cshtml.g.cs
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Usuario\Index.cshtml.g.cs
 D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\DedInfoservices.csproj.AssemblyReference.cache
+D:\PROJETOS\dedinfoservices\DedInfoservices\obj\Debug\net5.0\Razor\Views\Usuario\UsuarioSalvar.cshtml.g.cs

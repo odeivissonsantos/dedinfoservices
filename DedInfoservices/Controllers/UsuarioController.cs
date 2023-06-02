@@ -29,6 +29,14 @@ namespace DedInfoservices.Controllers
             return View();
         }
 
+        public IActionResult UsuarioSalvar(string guuid)
+        {
+            Usuario usuario = new Usuario();
+            if (!string.IsNullOrEmpty(guuid)) usuario =  _usuarioService.BuscarUsuario(2, guuid);
+            if (usuario == null || usuario.Ide_Perfil <= 0) usuario = new Usuario();
+            return View(usuario);
+        }
+
 
         [HttpPost]
         public virtual IActionResult UsuariosPagination(string sEcho, int iDisplayStart, int iColumns, int iDisplayLength, string sSearch)
@@ -50,6 +58,7 @@ namespace DedInfoservices.Controllers
                 data_cadastro = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),
                 qtd_acessos = x.Qtd_Acessos,
                 data_ultimo_acesso = x.Dtc_Ultimo_Acesso.HasValue ? x.Dtc_Ultimo_Acesso.Value.ToString("dd/MM/yyy HH:mm") : "",
+                editar = $"<a href='{Url.Action("UsuarioSalvar", "Usuario")}?guuid={x.Guid}' type='button' class='btn btn-warning'>Editar</a>",
                 acao = x.Sts_Exclusao == true ? $"<a href='#' type='button' class='btn btn-primary' onclick='reativar(\"{x.Guid}\")'>Ativar</a>" : $"<a href='#' type='button' class='btn btn-danger' onclick='desativar(\"{x.Guid}\")'>Desativar</a>"
             }).ToArray();
 
@@ -69,7 +78,7 @@ namespace DedInfoservices.Controllers
         {
             string error = "";
             bool is_action = false;
-            bool retornoEmail = false;
+            bool retornoEmail = true;
             string senhaNaoEncriptada = Guid.NewGuid().ToString().Substring(0, 8);
             string senhaEncriptada = Hash.SHA512(senhaNaoEncriptada);
 
@@ -89,11 +98,7 @@ namespace DedInfoservices.Controllers
                 if (string.IsNullOrEmpty(filter.Sobrenome)) throw new Exception("Campo Sobrenome é obrigatório.");
                 if (filter.Perfil.GetHashCode() < 1) throw new Exception("Campo Perfil é obrigatório.");
 
-                if (string.IsNullOrEmpty(filter.Guuid))
-                {
-                    filter.Guuid = Guid.NewGuid().ToString();
-                    filter.Senha = senhaEncriptada;
-                } 
+                if (string.IsNullOrEmpty(filter.Guuid)) filter.Senha = senhaEncriptada;
 
                 _usuarioService.SalvarUsuario(filter);
 

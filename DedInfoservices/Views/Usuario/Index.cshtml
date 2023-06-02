@@ -30,7 +30,11 @@
             </div>
         </div>
 
-        <table id="list_items" class="table table-bordered table-striped">
+        <div class="form-group col-xs-2 mb-2" style="margin-top: 25px; display: table-cell;">
+            <a href="@Url.Action("UsuarioSalvar", "Usuario")" class="btn btn-success" style="margin-left: 5px; color:white;">Novo</a>
+        </div>
+
+        <table id="list_items" class="table table-bordered table-striped mt-2">
             <thead>
                 <tr>
                     <th>Nome</th>
@@ -38,6 +42,7 @@
                     <th>Data Cadastro</th>
                     <th>Qtd. Acessos</th>
                     <th>Último Acesso</th>
+                    <th>Editar</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -49,6 +54,7 @@
                     <th>Data Cadastro</th>
                     <th>Qtd. Acessos</th>
                     <th>Último Acesso</th>
+                    <th>Editar</th>
                     <th>Ação</th>
                 </tr>
             </tfoot>
@@ -80,6 +86,7 @@
                 { 'mData': 'data_cadastro' },
                 { 'mData': 'qtd_acessos' },
                 { 'mData': 'data_ultimo_acesso' },
+                { 'mData': 'editar' },
                 { 'mData': 'acao' },
             ],
             "language": {
