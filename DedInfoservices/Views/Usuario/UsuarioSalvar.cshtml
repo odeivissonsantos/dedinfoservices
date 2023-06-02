@@ -118,12 +118,15 @@
             url: '@Url.Action("SalvarUsuario", "Usuario")',
             success: function (result) {
                 if (result.is_action) {
-                    $('#nome').val('');
-                    $('#sobrenome').val('');
-                    $('#email').val('');
-                    $('#perfil').val('');
-                    $('#msgSucess #sucessMsg').html('Usuário adicionado com sucesso.');
+                    $('#msgSucess #sucessMsg').html('@novo' == "True" ? 'Usuário adicionado com sucesso.' : 'Usuário atualizado com sucesso.');
                     $('#sucessModal').show();
+
+                    if ('@novo' == "True") {
+                        $('#nome').val('');
+                        $('#sobrenome').val('');
+                        $('#email').val('');
+                        $('#perfil').val('');
+                    }
                 }
                 else {
                     $('#msgError #erroMsg').html(result.error);
