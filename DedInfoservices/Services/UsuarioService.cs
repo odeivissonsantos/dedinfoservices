@@ -75,10 +75,10 @@ namespace DedInfoservices.Services
             return usuario;
         }
 
-        public void ReativarDesativarUsuario(int tipoExecuxao, string guid)
+        public void ReativarDesativarUsuario(int tipoExecuxao, string guuid)
         {
             //1 - Reativa; 2 - Desativa
-            var usuario = BuscarUsuario(2, guid);
+            var usuario = BuscarUsuario(2, guuid);
             if (usuario == null) throw new Exception("Usuário não encontrado.");
 
             usuario.Sts_Exclusao = tipoExecuxao == 1 ? false : true;

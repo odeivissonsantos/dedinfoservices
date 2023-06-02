@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\DedInfoservices",
+    "\\DedInfoservices\\wwwroot",
+    "\\DedInfoservices\\wwwroot\\css"
   ],
-  "SelectedNode": "\\DedInfoservices.sln",
+  "SelectedNode": "\\DedInfoservices\\DedInfoservices.sln",
   "PreviewInSolutionExplorer": false
 }

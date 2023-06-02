@@ -3,12 +3,30 @@
     Layout = "_Layout";
 }
 
-
 <section>
     <div class="text-center container">
         <br />
         <h2>Usuários</h2>
         <br />
+
+        <div>
+            <div id="errorModal" style="display: none">
+                <div id="msgError" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fa fa-ban"></i>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+
+                    <span id="erroMsg"></span>
+                </div>
+            </div>
+            <div id="sucessModal" style="display: none">
+                <div id="msgSucess" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fa fa-check"></i>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+
+                    <span id="sucessMsg"></span>
+                </div>
+            </div>
+        </div>
 
         <table id="list_items" class="table table-bordered table-striped">
             <thead>
@@ -67,4 +85,67 @@
             }
         });
     };
+
+    function reativar(guuid) {
+        fechar_alerta();
+        $.ajax({
+            type: 'POST',
+            data: {
+                'guuid': guuid
+            },
+            url: '@Url.Action("ReativarUsuario", "Usuario")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('#msgSucess #sucessMsg').html('Usuário reativado com sucesso.');
+                    $('#sucessModal').show();
+                    listar();
+                }
+                else {
+                    $('#msgError #erroMsg').html(result.error);
+                    $('#errorModal').show();
+                }
+            },
+            error: function (error)
+            {
+                $('#msgError #erroMsg').html(error.error);
+                $('#errorModal').show();
+            },
+            datatype: 'json'
+        });
+    }
+
+    function desativar(guuid) {
+        fechar_alerta();
+        $.ajax({
+            type: 'POST',
+            data: {
+                'guuid': guuid
+            },
+            url: '@Url.Action("DesativarUsuario", "Usuario")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('#msgSucess #sucessMsg').html('Usuário desativado com sucesso.');
+                    $('#sucessModal').show();
+                    listar();
+                }
+                else {
+                    $('#msgError #erroMsg').html(result.error);
+                    $('#errorModal').show();
+                }
+            },
+            error: function (error)
+            {
+                $('#msgError #erroMsg').html(error.error);
+                $('#errorModal').show();
+            },
+            datatype: 'json'
+        });
+    }
+
+    function fechar_alerta() {
+        $('#errorModal').hide();
+        $('#sucessModal').hide();
+    }
+
+
 </script>

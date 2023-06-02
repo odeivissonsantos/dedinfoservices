@@ -48,7 +48,7 @@ namespace DedInfoservices.Controllers
                 data_cadastro = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),
                 qtd_acessos = x.Qtd_Acessos,
                 data_ultimo_acesso = x.Dtc_Ultimo_Acesso.HasValue ? x.Dtc_Ultimo_Acesso.Value.ToString("dd/MM/yyy HH:mm") : "",
-                acao = x.Sts_Exclusao == true ? $"<a href='#' type='button' class='btn btn-primary' onclick='reativar({x.Guid})'>Ativar</a>" : $"<a href='#' type='button' class='btn btn-danger' onclick='desativar({x.Guid})'>Desativar</a>"
+                acao = x.Sts_Exclusao == true ? $"<a href='#' type='button' class='btn btn-primary' onclick='reativar(\"{x.Guid}\")'>Ativar</a>" : $"<a href='#' type='button' class='btn btn-danger' onclick='desativar(\"{x.Guid}\")'>Desativar</a>"
             }).ToArray();
 
             return Json(new
@@ -95,6 +95,50 @@ namespace DedInfoservices.Controllers
 
                 is_action = true;
 
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+            }
+
+            return Json(new { is_action, error });
+        }
+
+        [HttpPost]
+        public IActionResult ReativarUsuario(string guuid)
+        {
+            string error = "";
+            bool is_action = false;
+
+            try
+            {
+                if (string.IsNullOrEmpty(guuid)) throw new Exception("Campo Guid é obrigatório.");
+
+                _usuarioService.ReativarDesativarUsuario(1, guuid);
+
+                is_action = true;
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+            }
+
+            return Json(new { is_action, error });
+        }
+
+        [HttpPost]
+        public IActionResult DesativarUsuario(string guuid)
+        {
+            string error = "";
+            bool is_action = false;
+
+            try
+            {
+                if (string.IsNullOrEmpty(guuid)) throw new Exception("Campo Guid é obrigatório.");
+
+                _usuarioService.ReativarDesativarUsuario(2, guuid);
+
+                is_action = true;
             }
             catch (Exception ex)
             {
