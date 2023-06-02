@@ -5,8 +5,8 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>D:\publish\dedinfoservices</_PublishTargetUrl>
-    <History>True|2023-05-30T22:15:23.7003342Z;True|2023-05-30T18:45:26.2236505-03:00;</History>
+    <_PublishTargetUrl>C:\inetpub\wwwroot\dedinfoservices - HOM 1992</_PublishTargetUrl>
+    <History>True|2023-06-02T01:54:53.0691616Z;True|2023-05-30T19:15:23.7003342-03:00;True|2023-05-30T18:45:26.2236505-03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <DestinationConnectionStrings Include="ConnectionStringDesenvolvimento">

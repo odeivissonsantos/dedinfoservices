@@ -11,17 +11,17 @@
 
         <div>
             <div id="errorModal" style="display: none">
-                <div id="msgError" class="alert alert-danger">
+                <div id="msgError" class="alert alert-danger alert-dismissible fade show">
                     <i class="fa fa-ban"></i>
-                    <button class="close" onclick="fechar_alerta();" aria-hidden="true" type="button">×</button>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
 
                     <span id="erroMsg"></span>
                 </div>
             </div>
             <div id="sucessModal" style="display: none">
-                <div id="msgSucess" class="alert alert-success">
+                <div id="msgSucess" class="alert alert-success alert-dismissible fade show">
                     <i class="fa fa-ban"></i>
-                    <button class="close" onclick="fechar_alerta();" aria-hidden="true" type="button">×</button>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
 
                     <span id="sucessMsg"></span>
                 </div>
@@ -33,8 +33,8 @@
             <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="login@login.com.br">
         </div>
 
-        <div class="form-group">
-            <button class="btn btn-success" id="btn-entrar" onclick="EsqueceuSenha();">Recuperar</button>
+        <div class="form-group mt-3">
+            <button class="btn btn-success" type="button" id="btn-entrar" onclick="EsqueceuSenha();">Recuperar</button>
         </div>
 
 
@@ -48,6 +48,8 @@
 <script>
 
     function EsqueceuSenha() {
+        fechar_alerta();
+
         let email = $('#email').val();
         $('#msgError #erroMsg').html();
         $('#item_form #msgError').hide();
