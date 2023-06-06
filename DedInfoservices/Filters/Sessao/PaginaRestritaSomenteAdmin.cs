@@ -26,7 +26,7 @@ namespace DedInfoservices.Filters.Sessao
                 {
                     context.Result = new RedirectToRouteResult(new RouteValueDictionary { { "controller", "Login" }, { "action", "Index" } });
                 }
-                if (usuario.Ide_Perfil != Enums.PerfilEnum.Admin)
+                if (usuario.Perfil != Enums.PerfilEnum.Admin)
                 {
                     context.Result = new RedirectToRouteResult(new RouteValueDictionary { { "controller", "Home" }, { "action", "Index" } });
                 }

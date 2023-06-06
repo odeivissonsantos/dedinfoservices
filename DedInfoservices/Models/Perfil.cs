@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DedInfoservices.Models
 {
-    [Table("Perfil")]
+    [Table("perfil")]
     public class Perfil
     {
         [Key]

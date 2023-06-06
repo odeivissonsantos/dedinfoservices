@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DedInfoservices.Models
 {
-    [Table("Usuario")]
+    [Table("usuario")]
     public class Usuario
     {
         [Key]
@@ -18,8 +18,8 @@ namespace DedInfoservices.Models
         [Column("sobrenome")]
         public string Sobrenome { get; set; }
 
-        [Column("guid")]
-        public string Guid { get; set; } = new Guid().ToString();
+        [Column("guuid")]
+        public string Guuid { get; set; } = new Guid().ToString();
 
         [Column("email")]
         public string Email { get; set; }
@@ -40,6 +40,6 @@ namespace DedInfoservices.Models
         public DateTime? Dtc_Ultimo_Acesso { get; set; }
 
         [Column("ide_perfil")]
-        public PerfilEnum Ide_Perfil { get; set; }
+        public PerfilEnum Perfil { get; set; }
     }
 }

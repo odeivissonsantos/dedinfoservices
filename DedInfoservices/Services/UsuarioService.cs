@@ -37,11 +37,11 @@ namespace DedInfoservices.Services
             usuario.Nome = filter.Nome;
             usuario.Sobrenome = filter.Sobrenome;
             usuario.Email = filter.Email;
-            usuario.Ide_Perfil = filter.Perfil;
+            usuario.Perfil = filter.Perfil;
             
             if (novo)
             {
-                usuario.Guid = Guid.NewGuid().ToString();
+                usuario.Guuid = Guid.NewGuid().ToString();
                 usuario.Senha = filter.Senha;
                 _context.Usuario.Add(usuario);
             }

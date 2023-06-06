@@ -33,7 +33,7 @@ namespace DedInfoservices.Controllers
         {
             Usuario usuario = new Usuario();
             if (!string.IsNullOrEmpty(guuid)) usuario =  _usuarioService.BuscarUsuario(2, guuid);
-            if (usuario == null || usuario.Ide_Perfil <= 0) usuario = new Usuario();
+            if (usuario == null || usuario.Perfil <= 0) usuario = new Usuario();
             return View(usuario);
         }
 
@@ -54,12 +54,12 @@ namespace DedInfoservices.Controllers
             var data = aList.Select(x => new
             {
                 nome = $"{x.Nome} {x.Sobrenome}" ,
-                perfil = DescriptionEnum.GetEnumDescription((PerfilEnum)x.Ide_Perfil),
+                perfil = DescriptionEnum.GetEnumDescription((PerfilEnum)x.Perfil),
                 data_cadastro = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),
                 qtd_acessos = x.Qtd_Acessos,
                 data_ultimo_acesso = x.Dtc_Ultimo_Acesso.HasValue ? x.Dtc_Ultimo_Acesso.Value.ToString("dd/MM/yyy HH:mm") : "",
-                editar = $"<a href='{Url.Action("UsuarioSalvar", "Usuario")}?guuid={x.Guid}' type='button' class='btn btn-warning'>Editar</a>",
-                acao = x.Sts_Exclusao == true ? $"<a href='#' type='button' class='btn btn-primary' onclick='reativar(\"{x.Guid}\")'>Ativar</a>" : $"<a href='#' type='button' class='btn btn-danger' onclick='desativar(\"{x.Guid}\")'>Desativar</a>"
+                editar = $"<a href='{Url.Action("UsuarioSalvar", "Usuario")}?guuid={x.Guuid}' type='button' class='btn btn-warning'>Editar</a>",
+                acao = x.Sts_Exclusao == true ? $"<a href='#' type='button' class='btn btn-primary' onclick='reativar(\"{x.Guuid}\")'>Ativar</a>" : $"<a href='#' type='button' class='btn btn-danger' onclick='desativar(\"{x.Guid}\")'>Desativar</a>"
             }).ToArray();
 
             return Json(new
