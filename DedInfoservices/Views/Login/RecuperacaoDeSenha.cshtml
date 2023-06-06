@@ -3,50 +3,93 @@
     Layout = "_LayoutLogin";
 }
 
-<div class="center-form background-image-login">
-    <form class="card">
-        <div class="titulo-login">
-            <h3>LOGIN</h3>
-        </div>
+<div class="container-fluid bg full-height d-flex">
+    <div class="d-flex flex-column justify-content-between w-100">
+        <div class="container d-flex h-100">
+            <div class="row align-items-center w-100" style="margin-left: 0px;">
+                <div class="col-md-7 col-lg-5 m-h-auto">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-center mb-10 ">
+                            <img class="mt-5" src="/images/logo_menu.svg" alt="Detran/BA" style="width: 15rem;" />
+                        </div>
 
-        <div>
-            <div id="errorModal" style="display: none">
-                <div id="msgError" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fa fa-ban"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                        <div id="msgError" class="alert alert-danger alert-dismissible fade in mgtp" style="display: none;">
+                            <i class="fa fa-ban"></i>
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 
-                    <span id="erroMsg"></span>
+                            <span id="erroMsg"></span>
+                        </div>
+
+                        <div id="msgSucess" class="alert alert-success alert-dismissible fade in mgtp" style="display: none;">
+                            <i class="fa fa-check"></i>
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+
+                            <span id="sucessoMsg"></span>
+                        </div>
+
+                        <div id="form-login m-5">
+                            @using (Html.BeginForm("Index", "Login", FormMethod.Post, new { @id = "form-validation", @class = "form-horizontal", role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <input type="hidden" name="ReturnUrl" value="@ViewBag.ReturnUrl" />
+
+                                <div class="form-group mt-5">
+                                    <label class="font-weight-semibold" for="email">Email:</label>
+                                    <div class="input-affix mb-2">
+                                        <i class="prefix-icon anticon anticon-user"></i>
+                                        <input type="email" class="form-control" name="email" id="email" placeholder="admin@email.com.br" required />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="font-size-13 text-muted">
+
+                                        </span>
+                                        <button type="button" id="btn-login" class="btn btn-success-att btn-block" onclick="logar()">Recuperar</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div style="text-align:center">
+                                        <a href="@Url.Action("Index", "Login")">Voltar</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div id="sucessModal" style="display: none">
-                <div id="msgSucess" class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fa fa-check"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+        </div>
 
-                    <span id="sucessMsg"></span>
-                </div>
+        <footer class="d-flex align-items-center justify-content-between">
+            <div class="footer-content">
+                <span style="color:#000000; text-align:center;">Copyright © @DateTime.Now.Year DeD Infoservices. Todos os direitos reservados.</span>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="login@login.com.br">
-        </div>
-
-        <div class="form-group mt-3">
-            <button class="btn btn-success" type="button" id="btn-entrar" onclick="EsqueceuSenha();">Recuperar</button>
-        </div>
+        </footer>
+    </div>
 
 
-        <div class="form-group voltar">
-            <a href="@Url.Action("Index", "Login")">Voltar</a>
-        </div>
-
-    </form>
 </div>
 
 <script>
 
+    $(document).ready(function () {
+        $('#form-validation').bootstrapValidator({
+            fields: {
+                email: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Campo email é obrigatório.'
+                        }
+                    }
+                }
+            }
+        }).on('success.form.bv', function (e) {
+        });
+
+    });
     function EsqueceuSenha() {
         fechar_alerta();
 

@@ -2,9 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\DedInfoservices",
-    "\\DedInfoservices\\wwwroot",
-    "\\DedInfoservices\\wwwroot\\css"
+    "\\DedInfoservices\\Controllers"
   ],
-  "SelectedNode": "\\DedInfoservices\\DedInfoservices.sln",
   "PreviewInSolutionExplorer": false
 }

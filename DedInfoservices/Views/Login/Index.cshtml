@@ -4,47 +4,110 @@
 }
 
 
-<div class="center-form background-image-login">
-    <form class="card">
-        <div class="titulo-login">
-            <h3>LOGIN</h3>
-        </div>
+<div class="container-fluid bg full-height d-flex">
+    <div class="d-flex flex-column justify-content-between w-100">
+        <div class="container d-flex h-100">
+            <div class="row align-items-center w-100" style="margin-left: 0px;">
+                <div class="col-md-7 col-lg-5 m-h-auto">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-center mb-10 ">
+                            <img class="mt-5" src="/images/logo_menu.svg" alt="Detran/BA" style="width: 15rem;" />
+                        </div>
 
-        <div>
-            <div id="errorModal" style="display: none" class="mt-2">
-                <div id="msgError" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fa fa-ban"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                        <div id="msgError" class="alert alert-danger alert-dismissible fade in mgtp" style="display: none;">
+                            <i class="fa fa-ban"></i>
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 
-                    <span id="erroMsg"></span>
+                            <span id="erroMsg"></span>
+                        </div>
+
+                        <div id="form-login m-5">
+                            @using (Html.BeginForm("Index", "Login", FormMethod.Post, new { @id = "form-validation", @class = "form-horizontal", role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <input type="hidden" name="ReturnUrl" value="@ViewBag.ReturnUrl" />
+
+                                <div class="form-group mt-5">
+                                    <label class="font-weight-semibold" for="email">Email:</label>
+                                    <div class="input-affix mb-2">
+                                        <i class="prefix-icon anticon anticon-user"></i>
+                                        <input type="email" class="form-control" name="email" id="email" placeholder="admin@email.com.br" required />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-weight-semibold" for="senha">Senha:</label>
+                                    <div class="input-affix mb-2">
+                                        <i class="prefix-icon anticon anticon-lock"></i>
+                                        <input type="password" class="form-control" name="senha" id="senha" placeholder="Senha" required />
+                                        <a href="#" onclick="mostrarSenha()" style="color:#000000;">
+                                            <i class="eye_senha anticon anticon-eye"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="font-size-13 text-muted">
+
+                                        </span>
+                                        <button type="button" id="btn-login" class="btn btn-success-att btn-block" onclick="logar()">Entrar</button>                                        
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div style="text-align:center">
+                                        <span>Esqueçeu a senha?</span><a href="@Url.Action("RecuperacaoDeSenha", "Login")"> Clique Aqui!</a>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div style="text-align:center">
+                                        <span style="font-size: 11px;"><strong><b>Versão</b> Versão 1.0.0.1 </strong></span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="form-group mt-2">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="login@login.com.br">
-        </div>
+        <footer class="d-flex align-items-center justify-content-between">
+            <div class="footer-content">
+                <span style="color:#000000; text-align:center;">Copyright © @DateTime.Now.Year DeD Infoservices. Todos os direitos reservados.</span>
+            </div>
+        </footer>
+    </div>
 
-        <div class="form-group mt-4">
-            <label for="senha">Senha</label>
-            <input type="password" class="form-control" id="senha" placeholder="digite a senha">
-        </div>
 
-        <div class="form-group mt-2">
-            Esqueceu a senha? <a href="@Url.Action("RecuperacaoDeSenha", "Login")">Clique aqui!</a>
-        </div>
-
-        <div class="form-group mt-4">
-            <button class="btn btn-success" type="button" id="btn-entrar" onclick="Logar();">Entrar</button>
-        </div>
-
-    </form>
 </div>
 
 <script type="text/javascript">
 
-    function Logar() {
+    $(document).ready(function () {
+        $('#form-validation').bootstrapValidator({
+            fields: {
+                email: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Campo email é obrigatório.'
+                        }
+                    }
+                },
+                senha: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Campo senha é obrigatório'
+                        }
+                    }
+                }
+            }
+        }).on('success.form.bv', function (e) {
+        });
+
+    });
+
+    function logar() {
 
         fechar_alerta();
 
@@ -78,6 +141,15 @@
 
     function fechar_alerta() {
         $('#errorModal').hide();
+    }
+
+    function mostrarSenha() {
+        var tipo = document.getElementById("senha");
+        if (tipo.type == "password") {
+            tipo.type = "text";
+        } else {
+            tipo.type = "password";
+        }
     }
 
 
