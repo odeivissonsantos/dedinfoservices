@@ -1,0 +1,327 @@
+﻿@{
+    var controllerName = ViewContext.HttpContext.Request.RouteValues["Controller"]?.ToString();
+    var actionName = ViewContext.HttpContext.Request.RouteValues["action"]?.ToString();
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DeD Infoservices</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-light bg-light fixed-top">
+            <div class="container-fluid">
+                @*<a class="navbar-brand" href="#">Offcanvas navbar</a>*@
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a href="@Url.Action("Index","Home")">
+                    <img src="/images/logo_menu.svg" alt="logo-detran" style="width: 10rem;" />
+                </a>
+
+                <div class="btn-group dropstart">
+                    <button type="button" class="btn btn-info dropdown-toggle offcanvas-title" data-bs-toggle="dropdown" aria-expanded="false" id="offcanvasNavbarLabel">
+                        <strong><span id="current_user"></span></strong>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><button class="dropdown-item" type="button" onclick="modalAlterarsenha();">Alterar Senha</button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item" type="button" onclick="Sair();">Sair</button></li>
+                    </ul>
+                </div>
+
+                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <a href="@Url.Action("Index","Home")">
+                            <img src="/images/logo_menu.svg" alt="logo" style="width: 10rem;" />
+                        </a>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+
+                    <hr>
+
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <div class="nav-link @(actionName.ToUpper() == "INDEX" && controllerName.ToUpper() == "HOME" ? "active" : string.Empty)" aria-current="page">
+                                    <a href="@Url.Action("Index", "Home")"><i class="fa-solid fa-home p-3"></i>Home</a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item mt-3">
+                                <div class="nav-link @(actionName.ToUpper() == "INDEX" && controllerName.ToUpper() == "USUARIO" ? "active" : string.Empty)">
+                                    <a href="@Url.Action("Index", "Usuario")"><i class="fa-solid fa-user p-3"></i>Usuários</a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item mt-3">
+                                <div class="nav-link @(actionName.ToUpper() == "INDEX" && controllerName.ToUpper() == "CLIENTE" ? "active" : string.Empty)">
+                                    <a href="@Url.Action("Index", "Cliente")"><i class="fa-solid fa-address-book p-3"></i>Clientes</a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item mt-3">
+                                <div class="nav-link @(actionName.ToUpper() == "INDEX" && controllerName.ToUpper() == "PRODUTO" ? "active" : string.Empty)">
+                                    <a href="@Url.Action("Index", "Produto")"><i class="fa-solid fa-layer-group p-3"></i>Produtos</a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item mt-5">
+                                <div class="nav-link">
+                                    <a class="btn" onclick="Sair();"><i class="fa-solid fa-sign-out-alt p-3"></i>Sair</a>
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3 pt-6">
+            @RenderBody()
+        </main>
+    </div>
+
+    <div id="modalAlterarSenha" class="modalAlterarSenha">
+        <div class="modal fade" id="modal-Alterar-Senha" aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-centered" role="document">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Alterar Senha</h3>
+                        <button class="btn-close" id="fechar" onclick="modalfecharAlterarsenha()"></button>
+                    </div>
+
+                    <div class="container col-sm-12 mt-1">
+                        <div id="errorModal-senha" style="display: none">
+                            <div id="msgError-senha" class="alert alert-danger alert-dismissible fade show">
+                                <i class="fa fa-ban"></i>
+                                <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                                <span id="erroMsg-senha"></span>
+                            </div>
+                        </div>
+                        <div id="sucessModal-senha" style="display: none">
+                            <div id="msgSucess-senha" class="alert alert-success alert-dismissible fade show">
+                                <i class="fa fa-check"></i>
+                                <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                                <span id="sucessMsg-senha"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label">Senha atual*:</label>
+                                <div class="wrap-input100 validate-input" data-validate="Senha">
+                                    <div class="input-affix m-b-10">
+                                        <input type="password" id="AlterarSenha" name="SenhaAtual" class="form-control">
+                                        <a href="#" onclick="mostrarSenha()" style="color:#000000;">
+                                            <i id="eye_senha1" class="fa fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-2">
+                                <label class="control-label">Nova Senha*:</label>
+                                <div class="wrap-input100 validate-input" data-validate="Senha">
+                                    <div class="input-affix m-b-10">
+                                        <input type="password" id="NovaSenha" name="NovaSenha" class="form-control">
+                                        <a href="#" onclick="mostrarSenha2()" style="color:#000000;">
+                                            <i id="eye_senha2" class="fa fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-2">
+                                <label class="control-label"> Confirmação da nova senha*:</label>
+                                <div class="wrap-input100 validate-input" data-validate="Senha">
+                                    <div class="input-affix m-b-10">
+                                        <input type="password" id="ConfirmarNovaSenha" name="ConfirmarSenha" class="form-control">
+                                        <a href="#" onclick="mostrarSenha3()" style="color:#000000;">
+                                            <i id="eye_senha3" class="fa fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btn-confirmar-excluir" class="btn btn-success pull-right" onclick="AlterarSenha();">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer bg-light">
+        <div class="footer-content justify-content-between">
+            <span>&copy; 2023 - DeD INFOSERVICES</span>
+        </div>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/d7209917e5.js" crossorigin="anonymous"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        buscarNomeUsuarioLogado();
+    });
+
+    function buscarNomeUsuarioLogado() {
+        fechar_alerta();
+            $('#msgError #erroMsg').html();
+            $('#item_form #msgError').hide();
+            $.ajax({
+                type: 'POST',
+                data: {
+
+                },
+                url: '@Url.Action("BuscarNomeUsuarioLogado", "Usuario")',
+                success: function (result) {
+                    $('.overlay').hide();
+                    $('#current_user').html(result.nomeUsuarioLogado);
+                },
+                error: function (error) {
+                    $('#msgError-senha #erroMsg-senha').html(error.responseJSON.message);
+                    $('#errorModal-senha').show();
+                },
+            });
+
+    }
+
+    function modalAlterarsenha() {
+        $('#modal-Alterar-Senha').modal('show');
+    }
+
+    function modalfecharAlterarsenha() {
+        $('#modal-Alterar-Senha').modal('hide');
+    }
+
+    function fechar_alerta() {
+        $('#errorModal-senha').hide();
+        $('#sucessModal-senha').hide();
+    }
+
+    function AlterarSenha() {
+        if ($('#AlterarSenha').val() === "" || $('#NovaSenha').val() === "" || $('#ConfirmarNovaSenha').val() === "") {
+            $('#msgError-senha #erroMsg-senha').html('Campos com (*) são obrigatórios.');
+            $('#errorModal-senha').show();
+        }
+        else if ($('#NovaSenha').val() != $('#ConfirmarNovaSenha').val()) {
+            $('#msgError-senha #erroMsg-senha').html('Nova senha é diferente da senha de confirmação.');
+            $('#errorModal-senha').show();
+        } else {
+            fechar_alerta();
+            $('#msgError #erroMsg').html();
+            $('#item_form #msgError').hide();
+            $.ajax({
+                type: 'POST',
+                data: {
+                    'SenhaAtual': $('#AlterarSenha').val(),
+                    'NovaSenha': $('#NovaSenha').val(),
+                    'ConfirmarSenha': $('#ConfirmarNovaSenha').val(),
+                },
+                url: '@Url.Action("AlterarSenha", "Home")',
+                success: function (result) {
+                    if (result.is_action) {
+                        $('.overlay').hide();
+                        $('#sucessMsg-senha').html('Senha modificada  com sucesso!!!');
+                        $('#sucessModal-senha').show();
+                        $('#AlterarSenha').val('');
+                        $('#NovaSenha').val('');
+                        $('#ConfirmarNovaSenha').val('');
+                    }
+                    else {
+                        $('#msgError-senha #erroMsg-senha').html(result.error);
+                        $('#errorModal-senha').show();
+                    }
+                },
+                error: function (error) {
+                    $('#msgError-senha #erroMsg-senha').html(error.responseJSON.message);
+                    $('#errorModal-senha').show();
+                    $('#AlterarSenha').val('');
+                    $('#NovaSenha').val('');
+                    $('#ConfirmarNovaSenha').val('');
+                },
+            });
+        }
+
+    }
+
+    function mostrarSenha() {
+        var tipo = document.getElementById("AlterarSenha");
+        if (tipo.type == "password") {
+            tipo.type = "text";
+        } else {
+            tipo.type = "password";
+        }
+    }
+
+    function mostrarSenha2() {
+        var tipo = document.getElementById("NovaSenha");
+        if (tipo.type == "password") {
+            tipo.type = "text";
+        } else {
+            tipo.type = "password";
+        }
+    }
+
+    function mostrarSenha3() {
+        var tipo = document.getElementById("ConfirmarNovaSenha");
+        if (tipo.type == "password") {
+            tipo.type = "text";
+        } else {
+            tipo.type = "password";
+        }
+    }
+
+    function Sair() {
+        $.ajax({
+            type: 'POST',
+            data: {
+
+            },
+            url: '@Url.Action("Sair", "Login")',
+            success: function (result) {
+                if (result.is_action) {
+                    window.location.href = '@Url.Action("Index", "Login")';
+                }
+                else
+                {
+                    $('#msgError #erroMsg').html(result.error);
+                    $('#errorModal').show();
+                }
+            },
+            error: function (error) {
+                $('#msgError #erroMsg').html(error);
+                $('#errorModal').show();
+            },
+            datatype: 'json'
+        });
+    }
+
+</script>
