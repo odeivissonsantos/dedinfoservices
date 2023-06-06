@@ -128,19 +128,19 @@
                 else
                 {
                     $('#msgError #erroMsg').html(result.error);
-                    $('#errorModal').show();
+                    $('#msgError').show();
                 }
             },
             error: function (error) {
                 $('#msgError #erroMsg').html(error);
-                $('#errorModal').show();
+                $('#msgError').show();
             },
             datatype: 'json'
         });
     }
 
     function fechar_alerta() {
-        $('#errorModal').hide();
+        $('#msgError').hide();
     }
 
     function mostrarSenha() {
