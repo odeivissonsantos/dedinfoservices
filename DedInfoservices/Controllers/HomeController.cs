@@ -41,7 +41,7 @@ namespace DedInfoservices.Controllers
                 if (string.IsNullOrEmpty(filter.ConfirmarSenha)) throw new Exception("Campo Confirmação de Nova Senha é obrigatório.");
                 if (filter.NovaSenha != filter.ConfirmarSenha) throw new Exception("Nova senha é diferente da senha de confirmação.");
 
-                filter.Guuid = CurrentUser.Guid;
+                filter.Guuid = CurrentUser.Guuid;
 
                 _usuarioService.AlterarSenha(filter);
 

@@ -71,7 +71,7 @@ namespace DedInfoservices.Services
             //1 - Pesquisa por email; 2 - Pesquisa pelo GUID
             Usuario usuario = new();
             if(tipoPesquisa == 1) usuario = _context.Usuario.Where(x => x.Email == parametro).FirstOrDefault();
-            if(tipoPesquisa == 2) usuario = _context.Usuario.Where(x => x.Guid == parametro).FirstOrDefault();
+            if(tipoPesquisa == 2) usuario = _context.Usuario.Where(x => x.Guuid == parametro).FirstOrDefault();
 
             return usuario;
         }
