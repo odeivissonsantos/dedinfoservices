@@ -31,7 +31,7 @@
         </div>
 
         <div class="form-group col-xs-2 mb-2" style="margin-top: 25px; display: table-cell;">
-            <a href="@Url.Action("UsuarioSalvar", "Usuario")" class="btn btn-success" style="margin-left: 5px; color:white;">Novo</a>
+            <a href="@Url.Action("ProdutoSalvar", "Produto")" class="btn btn-success" style="margin-left: 5px; color:white;">Novo</a>
         </div>
 
         <table id="list_items" class="table table-bordered table-striped">
@@ -105,10 +105,10 @@
             data: {
                 'guuid': guuid
             },
-            url: '@Url.Action("ReativarUsuario", "Usuario")',
+            url: '@Url.Action("ReativarProduto", "Produto")',
             success: function (result) {
                 if (result.is_action) {
-                    $('#msgSucess #sucessMsg').html('Usuário reativado com sucesso.');
+                    $('#msgSucess #sucessMsg').html('Produto reativado com sucesso.');
                     $('#sucessModal').show();
                     listar();
                 }
@@ -133,10 +133,10 @@
             data: {
                 'guuid': guuid
             },
-            url: '@Url.Action("DesativarUsuario", "Usuario")',
+            url: '@Url.Action("DesativarProduto", "Produto")',
             success: function (result) {
                 if (result.is_action) {
-                    $('#msgSucess #sucessMsg').html('Usuário desativado com sucesso.');
+                    $('#msgSucess #sucessMsg').html('Produto desativado com sucesso.');
                     $('#sucessModal').show();
                     listar();
                 }

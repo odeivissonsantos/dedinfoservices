@@ -1,4 +1,5 @@
 ﻿using DedInfoservices.Context;
+using DedInfoservices.Filters.Produto;
 using DedInfoservices.Models;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,52 @@ namespace DedInfoservices.Services
         public List<Produto> ListarTodos()
         {
             return _context.Produto.ToList();
+        }
+
+        public Produto BuscarProduto(string guuid)
+        {
+            return _context.Produto.Where(x => x.Guuid == guuid).FirstOrDefault();
+        }
+
+        public void ReativarDesativarProduto(int tipoExecuxao, string guuid)
+        {
+            //1 - Reativa; 2 - Desativa
+            var produto = BuscarProduto(guuid);
+            if (produto == null) throw new Exception("Produto não encontrado.");
+
+            produto.Sts_Exclusao = tipoExecuxao == 1 ? false : true;
+
+            _context.Produto.Update(produto);
+            _context.SaveChanges();
+        }
+
+        public void SalvarProduto(SalvarProdutoFilter filter)
+        {
+            bool novo = true;
+            Produto produto = new();
+
+            produto = BuscarProduto(filter.Guuid);
+            if (produto != null) novo = false;
+            if (produto == null) produto = new();
+
+            produto.Nome = filter.Nome;
+            produto.Valor = filter.Valor;
+            produto.Codigo_Barras = filter.Codigo_Barras;
+            produto.Codigo_Interno = new Random().Next(10000, 99999);
+            produto.Descricao = filter.Descricao;
+
+            if (novo)
+            {
+                produto.Guuid = Guid.NewGuid().ToString();
+                _context.Produto.Add(produto);
+            }
+            else
+            {
+                _context.Produto.Update(produto);
+            }
+
+            _context.SaveChanges();
+
         }
     }
 }

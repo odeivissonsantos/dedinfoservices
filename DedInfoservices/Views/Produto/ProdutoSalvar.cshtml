@@ -1,0 +1,151 @@
+﻿@model DedInfoservices.Models.Produto
+@{
+    ViewData["Title"] = "Salvar Produto";
+    Layout = "_Layout";
+    bool novo = Model.Ide_Produto <= 0;
+}
+
+<link rel="stylesheet" href="~/css/produto.css" />
+
+<section>
+    <div class="text-center container">
+        <br />
+        @if (novo)
+        {
+            <h2>CADASTRAR PRODUTO</h2>
+        }
+        else
+        {
+            <h2>EDITAR PRODUTO</h2>
+        }
+        <br />
+
+        <div>
+            <div id="errorModal" style="display: none">
+                <div id="msgError" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fa fa-ban"></i>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+
+                    <span id="erroMsg"></span>
+                </div>
+            </div>
+            <div id="sucessModal" style="display: none">
+                <div id="msgSucess" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fa fa-check"></i>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+
+                    <span id="sucessMsg"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @if (!novo)
+            {
+                <div class="form-group col-sm-6">
+                    <label for="ide">Ide</label>
+                    <input type="number" name="ide" id="ide" class="form-control" value="@Model.Ide_Produto" disabled>
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label for="guuid">Guid</label>
+                    <input type="text" name="guuid" id="guuid" class="form-control" value="@Model.Guuid" disabled>
+                </div>
+            }
+
+            <div class="form-group col-sm-6">
+                <label for="nome">Nome (*)</label>
+                <input type="text" placeholder="Nome do Produto" id="nome" name="nome" value="@Model.Nome" class="form-control" required>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label for="valor">Valor (*)</label>
+                <input type="text" placeholder="Valor do Produto" id="valor" name="valor" value="@Model.Valor" class="form-control" maxlength="8" required>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label for="codigo_barras">Código de Barras</label>
+                <input type="number" placeholder="Código de Barras" id="codigo_barras" name="codigo_barras" value="@Model.Codigo_Barras" class="form-control" maxlength="13">
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label for="nome">Descrição</label>
+                <input type="text" placeholder="Descrição do Produto" id="descricao" name="descricao" value="@Model.Descricao" class="form-control">
+            </div>
+
+
+            <div class="row mt-3">
+                <div class="form-group col-sm-12">
+                    <button type="submit" class="btn @(novo ? "btn-primary" : "btn-success")" onclick="salvarProduto();">
+                        @(novo ? "Adicionar" : "Atualizar")
+                    </button>
+                    <a href="@Url.Action("Index", "Produto")" class="btn btn-light">Voltar</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</section>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#valor').mask('0.000,00', { reverse: true });
+    });
+
+    $("#valor").focusout(function () {
+        if ($(this).val().length <= 2) {
+            temp = $(this).val()
+            var newNum = temp + ",00"
+            $(this).val(newNum)
+        }
+    });
+
+    function salvarProduto() {
+        fechar_alerta();
+
+        let guuid = '@novo' == "True" ? "" : $('#guuid').val();
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                'Guuid': guuid,
+                'Nome': $('#nome').val(),
+                'Valor': $('#valor').val(),
+                'Codigo_Barras': $('#codigo_barras').val(),
+                'Descricao': $('#descricao').val()
+            },
+            url: '@Url.Action("SalvarProduto", "Produto")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('#msgSucess #sucessMsg').html('@novo' == "True" ? 'Produto adicionado com sucesso.' : 'Produto atualizado com sucesso.');
+                    $('#sucessModal').show();
+
+                    if ('@novo' == "True") {
+                        $('#nome').val('');
+                        $('#sobrenome').val('');
+                        $('#email').val('');
+                        $('#perfil').val('');
+                    }
+                }
+                else {
+                    $('#msgError #erroMsg').html(result.error);
+                    $('#errorModal').show();
+                }
+            },
+            error: function (error)
+            {
+                $('#msgError #erroMsg').html(error.error);
+                $('#errorModal').show();
+            },
+            datatype: 'json'
+        });
+    }
+
+    function fechar_alerta() {
+        $('#errorModal').hide();
+        $('#sucessModal').hide();
+    }
+
+</script>
