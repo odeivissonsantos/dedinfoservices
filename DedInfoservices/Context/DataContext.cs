@@ -19,6 +19,7 @@ namespace DedInfoservices.Context
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Produto> Produto { get; set; }
         public DbSet<Perfil> Perfil { get; set; }
+        public DbSet<Cliente> Cliente { get; set; }
 
     }
 }

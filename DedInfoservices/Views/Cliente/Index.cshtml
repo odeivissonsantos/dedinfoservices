@@ -3,6 +3,158 @@
     Layout = "_Layout";
 }
 
+<link rel="stylesheet" href="~/css/cliente.css" />
+
 <section>
+    <div class="text-center container">
+        <br />
+        <h2>Clientes</h2>
+        <br />
+
+        <div>
+            <div id="errorModal" style="display: none">
+                <div id="msgError" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fa fa-ban"></i>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+
+                    <span id="erroMsg"></span>
+                </div>
+            </div>
+            <div id="sucessModal" style="display: none">
+                <div id="msgSucess" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fa fa-check"></i>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+
+                    <span id="sucessMsg"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col-xs-2 mb-2" style="margin-top: 25px; display: table-cell;">
+            <a href="@Url.Action("ClienteSalvar", "Cliente")" class="btn btn-success" style="margin-left: 5px; color:white;">Novo</a>
+        </div>
+
+        <table id="list_items" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Whatsapp</th>
+                    <th>Data Cadastro</th>
+                    <th>Editar</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Whatsapp</th>
+                    <th>Data Cadastro</th>
+                    <th>Editar</th>
+                    <th>Ação</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
 
 </section>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        listar();
+    });
+
+    function listar() {
+        $('#list_items').dataTable({
+            'bPaginate': true,
+            'bJQueryUI': true,
+            'bProcessing': true,
+            'bServerSide': true,
+            "searching": true,
+            'bDestroy': true,
+            'sAjaxSource': `@Url.Action("ClientesPagination", "Cliente")`,
+            'sServerMethod': 'POST',
+            'aoColumns': [
+                { 'mData': 'nome' },
+                { 'mData': 'email' },
+                { 'mData': 'telefone' },
+                { 'mData': 'is_whatsapp' },
+                { 'mData': 'data_cadastro' },
+                { 'mData': 'editar' },
+                { 'mData': 'acao' },
+            ],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
+            }
+        });
+    };
+
+    function reativar(guuid) {
+        fechar_alerta();
+        $.ajax({
+            type: 'POST',
+            data: {
+                'guuid': guuid
+            },
+            url: '@Url.Action("ReativarCliente", "Cliente")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('#msgSucess #sucessMsg').html('Cliente reativado com sucesso.');
+                    $('#sucessModal').show();
+                    listar();
+                }
+                else {
+                    $('#msgError #erroMsg').html(result.error);
+                    $('#errorModal').show();
+                }
+            },
+            error: function (error)
+            {
+                $('#msgError #erroMsg').html(error.error);
+                $('#errorModal').show();
+            },
+            datatype: 'json'
+        });
+    }
+
+    function desativar(guuid) {
+        fechar_alerta();
+        $.ajax({
+            type: 'POST',
+            data: {
+                'guuid': guuid
+            },
+            url: '@Url.Action("DesativarCliente", "Cliente")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('#msgSucess #sucessMsg').html('Cliente desativado com sucesso.');
+                    $('#sucessModal').show();
+                    listar();
+                }
+                else {
+                    $('#msgError #erroMsg').html(result.error);
+                    $('#errorModal').show();
+                }
+            },
+            error: function (error)
+            {
+                $('#msgError #erroMsg').html(error.error);
+                $('#errorModal').show();
+            },
+            datatype: 'json'
+        });
+    }
+
+    function fechar_alerta() {
+        $('#errorModal').hide();
+        $('#sucessModal').hide();
+    }
+
+
+</script>
