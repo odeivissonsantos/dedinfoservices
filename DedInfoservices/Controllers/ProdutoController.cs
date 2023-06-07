@@ -42,10 +42,10 @@ namespace DedInfoservices.Controllers
             {
                 nome = x.Nome,
                 codigo_interno = x.Codigo_Interno,
-                codigo_barras = x.Codigo_Barras.HasValue ? x.Codigo_Barras : 0,
-                data_cadastro = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),
-                descricao = string.IsNullOrEmpty(x.Descricao) ? "Nenhuma descrição cadastrada." : x.Descricao,
-                dtc_inclusao = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),
+                codigo_barras = x.Codigo_Barras.HasValue ? x.Codigo_Barras.ToString() : "N/C",
+                descricao = string.IsNullOrEmpty(x.Descricao) ? "N/C" : x.Descricao,
+                data_cadastro = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),               
+                valor_unitario = x.Valor.ToString(),
                 editar = $"<a href='{Url.Action("UsuarioSalvar", "Usuario")}?guuid={x.Guuid}' type='button' class='btn btn-warning'>Editar</a>",
                 acao = x.Sts_Exclusao == true ? $"<a href='#' type='button' class='btn btn-primary' onclick='reativar(\"{x.Guuid}\")'>Ativar</a>" : $"<a href='#' type='button' class='btn btn-danger' onclick='desativar(\"{x.Guuid}\")'>Desativar</a>"
             }).ToArray();

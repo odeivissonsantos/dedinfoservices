@@ -3,10 +3,13 @@ using DedInfoservices.Filters.Login;
 using DedInfoservices.Helpers;
 using DedInfoservices.Models;
 using DedInfoservices.Utils;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace DedInfoservices.Controllers
@@ -52,6 +55,17 @@ namespace DedInfoservices.Controllers
 
                 if(senhaEncryptada != usuario.Senha) throw new Exception("Email/Senha inválido. Por favor, tente novamente.");
 
+                var claims = new List<Claim>();
+                claims.Add(new Claim("login", usuario.Email));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, usuario.Email));
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, usuario.Nome));
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, usuario.Email));
+
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                HttpContext.SignInAsync(claimsPrincipal);
+
                 _sessao.CreateCurrentUser(usuario);
 
                 usuario.Qtd_Acessos++;
@@ -59,6 +73,8 @@ namespace DedInfoservices.Controllers
 
                 _context.Usuario.Update(usuario);
                 _context.SaveChanges();
+
+
 
                 is_action = true;
 
@@ -121,6 +137,7 @@ namespace DedInfoservices.Controllers
 
             try
             {
+                HttpContext.SignOutAsync();
                 _sessao.KillCurrentUser();
                 is_action = true;
             }
