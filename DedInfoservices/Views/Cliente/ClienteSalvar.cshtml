@@ -1,8 +1,8 @@
-﻿@model DedInfoservices.Models.Produto
+﻿@model DedInfoservices.Models.Cliente
 @{
-    ViewData["Title"] = "Salvar Produto";
+    ViewData["Title"] = "Salvar Cliente";
     Layout = "_Layout";
-    bool novo = Model.Ide_Produto <= 0;
+    bool novo = Model.Ide_Cliente <= 0;
 }
 
 <link rel="stylesheet" href="~/css/produto.css" />
@@ -12,11 +12,11 @@
         <br />
         @if (novo)
         {
-            <h2>CADASTRAR PRODUTO</h2>
+            <h2>CADASTRAR CLIENTE</h2>
         }
         else
         {
-            <h2>EDITAR PRODUTO</h2>
+            <h2>EDITAR CLIENTE</h2>
         }
         <br />
 
@@ -41,44 +41,49 @@
         <div class="row">
             @if (!novo)
             {
-                <div class="form-group col-sm-6">
+                <div class="form-group col-sm-6 mt-3">
                     <label for="ide">Ide</label>
-                    <input type="number" name="ide" id="ide" class="form-control" value="@Model.Ide_Produto" disabled>
+                    <input type="number" name="ide" id="ide" class="form-control" value="@Model.Ide_Cliente" disabled>
                 </div>
 
-                <div class="form-group col-sm-6">
+                <div class="form-group col-sm-6 mt-3">
                     <label for="guuid">Guid</label>
                     <input type="text" name="guuid" id="guuid" class="form-control" value="@Model.Guuid" disabled>
                 </div>
             }
 
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-6 mt-4">
                 <label for="nome">Nome (*)</label>
-                <input type="text" placeholder="Nome do Produto" id="nome" name="nome" value="@Model.Nome" class="form-control" required>
+                <input type="text" placeholder="Nome do Cliente" id="nome" name="nome" value="@Model.Nome" class="form-control" required>
             </div>
 
-            <div class="form-group col-sm-6">
-                <label for="valor">Valor (*)</label>
-                <input type="text" placeholder="Valor do Produto" id="valor" name="valor" value="@Model.Valor" class="form-control" maxlength="8" required>
-            </div>
-
-            <div class="form-group col-sm-6">
-                <label for="codigo_barras">Código de Barras</label>
-                <input type="number" placeholder="Código de Barras" id="codigo_barras" name="codigo_barras" value="@Model.Codigo_Barras" class="form-control" maxlength="13">
-            </div>
-
-            <div class="form-group col-sm-6">
-                <label for="nome">Descrição</label>
-                <input type="text" placeholder="Descrição do Produto" id="descricao" name="descricao" value="@Model.Descricao" class="form-control">
+            <div class="form-group col-sm-6  mt-4">
+                <label for="sobrenome">Sobrenome</label>
+                <input type="text" placeholder="Sobrenome do Cliente" id="sobrenome" name="sobrenome" value="@Model.Sobrenome" class="form-control">
             </div>
 
 
-            <div class="row mt-3">
+            <div class="form-group col-sm-6  mt-4">
+                <label for="nome">Telefone (*)</label>
+                <input type="number" placeholder="Telefone do Cliente" id="telefone" name="telefone" value="@Model.Telefone" class="form-control" required>
+            </div>
+
+            <div class="form-group col-sm-6  mt-4">
+                <label for="email">Email</label>
+                <input type="email" placeholder="Email do Cliente" id="email" name="email" value="@Model.Email" class="form-control">
+            </div>
+
+            <div class="form-group col-sm-6 text-start mt-2">
+                <input type="checkbox" id="is_whatsapp" name="is_whatsapp" value="@Model.Is_Whatsapp" />
+                <label for="is_whatsapp">Este telefone é whatsapp?</label>
+            </div>
+
+            <div class="row mt-4">
                 <div class="form-group col-sm-12">
-                    <button type="submit" class="btn @(novo ? "btn-primary" : "btn-success")" onclick="salvarProduto();">
+                    <button type="submit" class="btn @(novo ? "btn-primary" : "btn-success")" onclick="salvarCliente();">
                         @(novo ? "Adicionar" : "Atualizar")
                     </button>
-                    <a href="@Url.Action("Index", "Produto")" class="btn btn-light">Voltar</a>
+                    <a href="@Url.Action("Index", "Cliente")" class="btn btn-light">Voltar</a>
                 </div>
             </div>
         </div>
@@ -91,18 +96,10 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        $('#valor').mask('0.000,00', { reverse: true });
     });
 
-    $("#valor").focusout(function () {
-        if ($(this).val().length <= 2) {
-            temp = $(this).val()
-            var newNum = temp + ",00"
-            $(this).val(newNum)
-        }
-    });
 
-    function salvarProduto() {
+    function salvarCliente() {
         fechar_alerta();
 
         let guuid = '@novo' == "True" ? "" : $('#guuid').val();
@@ -112,21 +109,22 @@
             data: {
                 'Guuid': guuid,
                 'Nome': $('#nome').val(),
-                'Valor': $('#valor').val(),
-                'Codigo_Barras': $('#codigo_barras').val(),
-                'Descricao': $('#descricao').val()
+                'Sobrenome': $('#sobrenome').val(),
+                'Email': $('#email').val(),
+                'Telefone': $('#telefone').val(),
+                'Is_Whatsapp': $('#is_whatsapp').is(':checked')
             },
-            url: '@Url.Action("SalvarProduto", "Produto")',
+            url: '@Url.Action("SalvarCliente", "Cliente")',
             success: function (result) {
                 if (result.is_action) {
-                    $('#msgSucess #sucessMsg').html('@novo' == "True" ? 'Produto adicionado com sucesso.' : 'Produto atualizado com sucesso.');
+                    $('#msgSucess #sucessMsg').html('@novo' == "True" ? 'Cliente adicionado com sucesso.' : 'Cliente atualizado com sucesso.');
                     $('#sucessModal').show();
 
                     if ('@novo' == "True") {
                         $('#nome').val('');
-                        $('#valor').val('');
-                        $('#codigo_barras').val('');
-                        $('#descricao').val('');
+                        $('#sobrenome').val('');
+                        $('#email').val('');
+                        $('#telefone').val('');
                     }
                 }
                 else {

@@ -1,4 +1,5 @@
-﻿using DedInfoservices.Filters.Sessao;
+﻿using DedInfoservices.Filters.Cliente;
+using DedInfoservices.Filters.Sessao;
 using DedInfoservices.Models;
 using DedInfoservices.Services;
 using DedInfoservices.Utils;
@@ -22,6 +23,14 @@ namespace DedInfoservices.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult ClienteSalvar(string guuid)
+        {
+            Cliente cliente = new Cliente();
+            if (!string.IsNullOrEmpty(guuid)) cliente = _clienteService.BuscarCliente(guuid);
+            if (cliente == null || cliente.Ide_Cliente <= 0) cliente = new Cliente();
+            return View(cliente);
         }
 
         [HttpPost]
@@ -95,6 +104,30 @@ namespace DedInfoservices.Controllers
                 _clienteService.ReativarDesativarCliente(2, guuid);
 
                 is_action = true;
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+            }
+
+            return Json(new { is_action, error });
+        }
+
+        [HttpPost]
+        public IActionResult SalvarCliente(SalvarClienteFilter filter)
+        {
+            string error = "";
+            bool is_action = false;
+
+            try
+            {
+                if (string.IsNullOrEmpty(filter.Nome)) throw new Exception("Campo Nome é obrigatório.");
+                if (filter.Telefone <= 0) throw new Exception("Campo Telefone é obrigatório.");
+
+                _clienteService.SalvarCliente(filter);
+
+                is_action = true;
+
             }
             catch (Exception ex)
             {

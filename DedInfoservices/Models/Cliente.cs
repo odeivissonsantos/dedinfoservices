@@ -24,7 +24,6 @@ namespace DedInfoservices.Models
         [Column("sobrenome")]
         public string Sobrenome { get; set; }
 
-
         [Column("email")]
         public string Email { get; set; }
 

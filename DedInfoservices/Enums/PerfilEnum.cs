@@ -8,7 +8,10 @@ namespace DedInfoservices.Enums
         Admin = 1,
 
         [Description("Padrão")]
-        Padrao = 2
+        Padrao = 2,
+
+        [Description("Cliente")]
+        Cliente = 3
 
     }
 }

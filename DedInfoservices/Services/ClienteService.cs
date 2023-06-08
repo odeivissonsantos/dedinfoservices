@@ -1,4 +1,5 @@
 ﻿using DedInfoservices.Context;
+using DedInfoservices.Filters.Cliente;
 using DedInfoservices.Models;
 using System;
 using System.Collections.Generic;
@@ -30,12 +31,42 @@ namespace DedInfoservices.Services
         {
             //1 - Reativa; 2 - Desativa
             var cliente = BuscarCliente(guuid);
-            if (cliente == null) throw new Exception("Produto não encontrado.");
+            if (cliente == null) throw new Exception("Cliente não encontrado.");
 
             cliente.Sts_Exclusao = tipoExecuxao == 1 ? false : true;
 
             _context.Cliente.Update(cliente);
             _context.SaveChanges();
+        }
+
+        public void SalvarCliente(SalvarClienteFilter filter)
+        {
+            bool novo = true;
+            Cliente cliente = new();
+
+            cliente = BuscarCliente(filter.Guuid);
+            if (cliente != null) novo = false;
+            if (cliente == null) cliente = new();
+
+            cliente.Nome = filter.Nome;
+            cliente.Sobrenome = filter.Sobrenome;
+            cliente.Email = filter.Email;
+            cliente.Telefone = filter.Telefone;
+            cliente.Is_Whatsapp = filter.Is_Whatsapp;
+            cliente.Perfil = Enums.PerfilEnum.Cliente;
+
+            if (novo)
+            {
+                cliente.Guuid = Guid.NewGuid().ToString();
+                _context.Cliente.Add(cliente);
+            }
+            else
+            {
+                _context.Cliente.Update(cliente);
+            }
+
+            _context.SaveChanges();
+
         }
     }
 }
