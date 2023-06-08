@@ -9,7 +9,6 @@
     <div class="text-center container">
         <br />
         <h2>Produtos</h2>
-        <br />
 
         <div>
             <div id="errorModal" style="display: none">
@@ -30,17 +29,17 @@
             </div>
         </div>
 
-        <div class="form-group col-xs-2 mb-2" style="margin-top: 25px; display: table-cell;">
-            <a href="@Url.Action("ProdutoSalvar", "Produto")" class="btn btn-success" style="margin-left: 5px; color:white;">Novo</a>
+        <div class="form-group mt-3 mb-3" style="display: table;">
+            <a href="@Url.Action("ProdutoSalvar", "Produto")" class="btn btn-success" color:white;">Novo</a>
         </div>
 
         <table id="list_items" class="table table-bordered table-striped">
-            <thead>
+            <thead class="table-info">
                 <tr>
                     <th>Nome</th>
                     <th>Cód. Interno</th>
                     <th>Cód. Barras</th>
-                    <th>Desc.</th>
+                    <th>Descrição</th>
                     <th>Data Cadastro</th>
                     <th>Valor Unit.</th>
                     <th>Editar</th>
@@ -48,12 +47,12 @@
                 </tr>
             </thead>
             <tbody></tbody>
-            <tfoot>
+            <tfoot class="table-info">
                 <tr>
                     <th>Nome</th>
                     <th>Cód. Interno</th>
                     <th>Cód. Barras</th>
-                    <th>Desc.</th>
+                    <th>Descrição</th>
                     <th>Data Cadastro</th>
                     <th>Valor Unit.</th>
                     <th>Editar</th>
