@@ -42,33 +42,33 @@
         <div class="row">
             @if (!novo)
             {
-                <div class="form-group col-sm-6">
+                <div class="form-group col-sm-6 mt-3">
                     <label for="ide">Ide</label>
                     <input type="number" name="ide" id="ide" class="form-control" value="@Model.Ide_Usuario" disabled>
                 </div>
 
-                <div class="form-group col-sm-6">
+                <div class="form-group col-sm-6 mt-3">
                     <label for="guuid">Guid</label>
                     <input type="text" name="guuid" id="guuid" class="form-control" value="@Model.Guuid" disabled>
                 </div>
             }
 
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-6 mt-3">
                 <label for="nome">Nome (*)</label>
                 <input type="text" placeholder="Nome do Usuário" id="nome" name="nome" value="@Model.Nome" class="form-control">
             </div>
 
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-6 mt-3">
                 <label for="sobrenome">Sobrenome (*)</label>
                 <input type="text" placeholder="Sobrenome do Usuário" id="sobrenome" name="sobrenome" value="@Model.Sobrenome" class="form-control" required>
             </div>
 
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-6 mt-3">
                 <label for="nome">Email (*)</label>
                 <input type="email" placeholder="Email do Usuário" id="email" name="email" value="@Model.Email" class="form-control">
             </div>
 
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-6 mt-3">
                 <label for="perfil">Perfil (*)</label>
                 <select id="perfil" name="perfil" class="form-control">
                     <option value="">Selecione...</option>

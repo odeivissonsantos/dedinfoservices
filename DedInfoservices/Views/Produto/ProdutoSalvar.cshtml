@@ -41,33 +41,33 @@
         <div class="row">
             @if (!novo)
             {
-                <div class="form-group col-sm-6">
+                <div class="form-group col-sm-6 mt-3">
                     <label for="ide">Ide</label>
                     <input type="number" name="ide" id="ide" class="form-control" value="@Model.Ide_Produto" disabled>
                 </div>
 
-                <div class="form-group col-sm-6">
+                <div class="form-group col-sm-6 mt-3">
                     <label for="guuid">Guid</label>
                     <input type="text" name="guuid" id="guuid" class="form-control" value="@Model.Guuid" disabled>
                 </div>
             }
 
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-6 mt-3">
                 <label for="nome">Nome (*)</label>
                 <input type="text" placeholder="Nome do Produto" id="nome" name="nome" value="@Model.Nome" class="form-control" required>
             </div>
 
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-6 mt-3">
                 <label for="valor">Valor (*)</label>
                 <input type="text" placeholder="Valor do Produto" id="valor" name="valor" value="@Model.Valor" class="form-control" maxlength="8" required>
             </div>
 
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-6 mt-3">
                 <label for="codigo_barras">Código de Barras</label>
                 <input type="number" placeholder="Código de Barras" id="codigo_barras" name="codigo_barras" value="@Model.Codigo_Barras" class="form-control" maxlength="13">
             </div>
 
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-6 mt-3">
                 <label for="nome">Descrição</label>
                 <input type="text" placeholder="Descrição do Produto" id="descricao" name="descricao" value="@Model.Descricao" class="form-control">
             </div>
