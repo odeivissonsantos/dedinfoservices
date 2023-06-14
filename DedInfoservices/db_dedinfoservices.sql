@@ -100,7 +100,7 @@ CREATE TABLE [venda] (
 	dtc_inclusao datetime NOT NULL,
 	sts_exclusao bit NOT NULL,
 	sts_venda bit NOT NULL,
-  CONSTRAINT [PK_CARRINHO] PRIMARY KEY CLUSTERED
+  CONSTRAINT [PK_VENDA] PRIMARY KEY CLUSTERED
   (
   ide_venda ASC
   ) WITH (IGNORE_DUP_KEY = OFF)

@@ -1,10 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\DedInfoservices",
-    "\\DedInfoservices\\Views",
-    "\\DedInfoservices\\Views\\Cliente"
+    "\\DedInfoservices"
   ],
-  "SelectedNode": "\\DedInfoservices\\Views\\Cliente\\ClienteSalvar.cshtml",
+  "SelectedNode": "\\DedInfoservices\\DedInfoservices.sln",
   "PreviewInSolutionExplorer": false
 }
