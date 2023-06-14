@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Vendas";
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet" href="~/css/venda.css" />
+
+<section>
+    <div class="text-center container">
+        <br />
+        <h2>Vendas</h2>
+
+        <div>
+            <div id="errorModal" style="display: none">
+                <div id="msgError" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fa fa-ban"></i>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+
+                    <span id="erroMsg"></span>
+                </div>
+            </div>
+            <div id="sucessModal" style="display: none">
+                <div id="msgSucess" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fa fa-check"></i>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+
+                    <span id="sucessMsg"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mt-3 mb-3" style="display: table;">
+            <a href="@Url.Action("NovaVenda", "Venda")" class="btn btn-success" color:white;">Novo</a>
+        </div>
+
+        <table id="list_items" class="table table-bordered table-striped">
+            <thead class="table-info">
+                <tr>
+                    <th>Cliente</th>
+                    <th>Usuário Inclusão</th>
+                    <th>Data</th>
+                    <th>Qtd. Itens</th>
+                    <th>Forma Pagamento</th>
+                    <th>Valor Total</th>
+                    <th>Status</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot class="table-info">
+                <tr>
+                    <th>Cliente</th>
+                    <th>Usuário Inclusão</th>
+                    <th>Data</th>
+                    <th>Qtd. Itens</th>
+                    <th>Forma Pagamento</th>
+                    <th>Valor Total</th>
+                    <th>Status</th>
+                    <th>Ação</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+
+</section>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        listar();
+    });
+
+    function listar() {
+        $('#list_items').dataTable({
+            'bPaginate': true,
+            'bJQueryUI': true,
+            'bProcessing': true,
+            'bServerSide': true,
+            "searching": true,
+            'bDestroy': true,
+            'sAjaxSource': `@Url.Action("VendasPagination", "Venda")`,
+            'sServerMethod': 'POST',
+            'aoColumns': [
+                { 'mData': 'nome_cliente' },
+                { 'mData': 'nome_usuario_inclusao' },
+                { 'mData': 'data_inclusao' },
+                { 'mData': 'qtd_itens' },
+                { 'mData': 'tipo_pagamento' },
+                { 'mData': 'valor_total' },
+                { 'mData': 'sts_venda' },
+                { 'mData': 'acao' }
+            ],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
+            }
+        });
+    };
+
+</script>

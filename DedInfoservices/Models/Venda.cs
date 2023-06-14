@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DedInfoservices.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -33,7 +34,7 @@ namespace DedInfoservices.Models
         public int Qtd_Itens { get; set; }
 
         [Column("tipo_pagamento")]
-        public int Tipo_Pagamento { get; set; }
+        public TipoPagamentoEnum Tipo_Pagamento { get; set; }
 
         [Column("dtc_inclusao")]
         public DateTime Dtc_Inclusao { get; set; } = DateTime.Now;

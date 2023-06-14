@@ -21,7 +21,7 @@ namespace DedInfoservices.Models
         public string Guuid_Cliente { get; set; }
 
         [Column("guuid_produto")]
-        public string Guuid_Produto{ get; set; }
+        public string Guuid_Produto { get; set; }
 
         [Column("produto_valor_unitario")]
         public decimal? Produto_Valor_Unitario { get; set; }

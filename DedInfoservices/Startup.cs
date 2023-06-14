@@ -44,6 +44,7 @@ namespace DedInfoservices
             services.AddScoped<LoginService>();
             services.AddScoped<ProdutoService>();
             services.AddScoped<UsuarioService>();
+            services.AddScoped<VendaService>();
             services.AddScoped<SessionHelper>();
 
             services.AddSession(o =>
