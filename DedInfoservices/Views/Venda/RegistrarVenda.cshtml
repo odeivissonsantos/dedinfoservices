@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "Registrar Venda";
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet" href="~/css/venda.css" />
+
+<section>
+    <div class="container">
+        <br />
+        <h2 class="text-center">Registrar Venda</h2>
+
+        <div>
+            <div id="errorModal" style="display: none">
+                <div id="msgError" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fa fa-ban"></i>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+
+                    <span id="erroMsg"></span>
+                </div>
+            </div>
+            <div id="sucessModal" style="display: none">
+                <div id="msgSucess" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fa fa-check"></i>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+
+                    <span id="sucessMsg"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-2 mb-2">
+            <div class="col-sm-1">
+                <label>Cliente:</label>
+            </div>
+
+            <div class="col-sm-3">
+                <input type="text" id="guuid_cliente" name="guuid_cliente" value="@ViewBag.Cliente.Guuid" style="display:none" />
+                <span>@ViewBag.Cliente.Nome @ViewBag.Cliente.Sobrenome</span>
+            </div>
+        </div>
+
+        <div class="row mt-2 mb-2">
+            <div class="col-sm-1">
+                <label>Produtos:</label>
+            </div>
+
+            <div class="col-sm-3">
+                <select id="select-produtos" class="form-select">
+                    @foreach (var item in @ViewBag.Produtos)
+                    {
+                        <option value="@item.Guuid">@item.Nome - R$ @item.Valor</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-sm-3">
+                <button type="button" class="btn btn-success">Adicionar</button>
+            </div>
+
+        </div>
+
+        <div class="row mt-2 mb-2">
+            <div class="col-sm-1">
+                <label>Pedido:</label>
+            </div>
+
+            <div class="col-sm-3">
+                <span id="pedido"></span>
+            </div>
+        </div>
+
+        <table id="list_items" class="table table-bordered table-striped">
+            <thead class="table-info">
+                <tr>
+                    <th>Produto</th>
+                    <th>Valor</th>
+                    <th>Desconto (%)</th>
+                    <th>Valor Final</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot class="table-info">
+                <tr>
+                    <th>Produto</th>
+                    <th>Valor</th>
+                    <th>Desconto (%)</th>
+                    <th>Valor Final</th>
+                    <th>Ação</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+
+</section>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+    });
+
+</script>

@@ -30,7 +30,7 @@
         </div>
 
         <div class="form-group mt-3 mb-3" style="display: table;">
-            <a href="@Url.Action("NovaVenda", "Venda")" class="btn btn-success" color:white;">Novo</a>
+            <button onclick="modalExclusao();" type="button" class="btn btn-success" color:white;">Registrar Venda</button>
         </div>
 
         <table id="list_items" class="table table-bordered table-striped">
@@ -65,9 +65,45 @@
 
 </section>
 
+<div id="modalExclusao" style="text-align:center; color:black">
+    <div class="modal fade" id="modal-exclusao" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Iniciar Venda</h4>
+
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        
+                        <div class="col-sm-12">
+                            <h5> Escolha o cliente </h5>
+                        </div>
+
+                        <div class="col-sm-12">
+
+                            <select id="select-clientes" class="form-select">
+                                @foreach (var item in @ViewBag.Clientes)
+                                {
+                                    <option value="@item.Guuid">@item.Nome @item.Sobrenome</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-confirmar-exclusao" class="btn btn-primary pull-right">Iniciar Venda</button>
+                    <button type="button" class="btn btn-secondary pull-left" onclick="fecharModal();">Não</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
 
     $(document).ready(function () {
+        $('#btn-confirmar-exclusao').on('click', iniciarVenda);
         listar();
     });
 
@@ -96,5 +132,19 @@
             }
         });
     };
+
+    function modalExclusao() {
+        $('#modal-exclusao').modal('show');
+
+    }
+
+    function iniciarVenda() {
+        let guuid_cliente = $('#select-clientes').val();
+        window.location.href = `@Url.Action("RegistrarVenda", "Venda")?guuid_cliente=${guuid_cliente}`;
+    }
+
+    function fecharModal() {
+        $('#modal-exclusao').modal('hide');
+    }
 
 </script>

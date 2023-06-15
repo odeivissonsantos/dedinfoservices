@@ -13,18 +13,30 @@ namespace DedInfoservices.Controllers
     public class VendaController : BaseController
     {
         private readonly VendaService _vendaService;
-        public VendaController(VendaService vendaService)
+        private readonly ProdutoService _produtoService;
+        private readonly ClienteService _clienteService;
+
+        public VendaController(VendaService vendaService, ProdutoService produtoService, ClienteService clienteService)
         {
             _vendaService = vendaService;
+            _produtoService = produtoService;
+            _clienteService = clienteService;
         }
 
 
         public IActionResult Index()
         {
+            ViewBag.Clientes = _clienteService.ListarTodos().Where(x => !x.Sts_Exclusao).ToList();
             return View();
         }
 
-
+        public IActionResult RegistrarVenda(string guuid_cliente)
+        {
+            ViewBag.Cliente = _clienteService.ListarTodos().Where(x => x.Guuid == guuid_cliente).FirstOrDefault();
+            ViewBag.Produtos = _produtoService.ListarTodos().Where(x => !x.Sts_Exclusao).ToList();
+            return View();
+        }
+        
         [HttpPost]
         public virtual IActionResult VendasPagination(string sEcho, int iDisplayStart, int iColumns, int iDisplayLength, string sSearch)
         {
