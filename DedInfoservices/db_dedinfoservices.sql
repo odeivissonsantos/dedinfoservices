@@ -80,6 +80,7 @@ CREATE TABLE [carrinho] (
 	produto_valor_unitario decimal(5,2) NULL,
 	desconto int NULL,
 	valor_final decimal(5,2) NULL,
+	sts_carrinho bit NOT NULL
   CONSTRAINT [PK_CARRINHO] PRIMARY KEY CLUSTERED
   (
   ide_carrinho ASC

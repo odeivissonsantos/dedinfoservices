@@ -53,45 +53,48 @@
                     }
                 </select>
             </div>
-
-            <div class="col-sm-3">
-                <button type="button" class="btn btn-success">Adicionar</button>
-            </div>
-
-        </div>
-
-        <div class="row mt-2 mb-2">
             <div class="col-sm-1">
-                <label>Pedido:</label>
+                <input type="text" placeholder="desconto" id="desconto" name="desconto" class="form-control" />
             </div>
 
             <div class="col-sm-3">
-                <span id="pedido"></span>
+                <button type="button" class="btn btn-success" onclick="adicionarProduto();">Adicionar</button>
             </div>
-        </div>
 
-        <table id="list_items" class="table table-bordered table-striped">
-            <thead class="table-info">
-                <tr>
-                    <th>Produto</th>
-                    <th>Valor</th>
-                    <th>Desconto (%)</th>
-                    <th>Valor Final</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-            <tfoot class="table-info">
-                <tr>
-                    <th>Produto</th>
-                    <th>Valor</th>
-                    <th>Desconto (%)</th>
-                    <th>Valor Final</th>
-                    <th>Ação</th>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+            </div>
+
+            <div class="row mt-2 mb-2">
+                <div class="col-sm-6">
+                    <label>Pedido: </label> <span id="numero_pedido"> @ViewBag.Guuid_Carrinho</span>
+                </div>
+
+                <div class="col-sm-3">
+                    <span id="pedido"></span>
+                </div>
+            </div>
+
+            <table id="list_items" class="table table-bordered table-striped">
+                <thead class="table-info">
+                    <tr>
+                        <th>Produto</th>
+                        <th>Valor</th>
+                        <th>Desconto (%)</th>
+                        <th>Valor Final</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot class="table-info">
+                    <tr>
+                        <th>Produto</th>
+                        <th>Valor</th>
+                        <th>Desconto (%)</th>
+                        <th>Valor Final</th>
+                        <th>Ação</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
 
 
 </section>
@@ -99,6 +102,96 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        listar();
     });
+
+    function listar() {
+        let guuid_cliente = $('#numero_pedido').html();
+
+        $('#list_items').dataTable({
+            'bPaginate': true,
+            'bJQueryUI': true,
+            'bProcessing': true,
+            'bServerSide': true,
+            "searching": true,
+            'bDestroy': true,
+            'sAjaxSource': `@Url.Action("CarrinhoPagination", "Venda")?guuid_carrinho=${guuid_cliente}`,
+            'sServerMethod': 'POST',
+            'aoColumns': [
+                { 'mData': 'produto' },
+                { 'mData': 'valor_produto' },
+                { 'mData': 'desconto' },
+                { 'mData': 'valor_final' },
+                { 'mData': 'acao' }
+            ],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
+            }
+        });
+    };
+
+    function adicionarProduto() {
+        fechar_alerta();
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                'Guuid_Carrinho': $('#numero_pedido').val(),
+                'Guuid_Cliente': $('#guuid_cliente').val(),
+                'Guuid_Produto': $('#select-produtos').val(),
+                'Desconto': $('#desconto').val(),
+            },
+            url: '@Url.Action("AdicionarProduto", "Venda")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('#msgSucess #sucessMsg').html('Produto adicionado com sucesso.');
+                    $('#sucessModal').show();
+                    $('#desconto').val('');
+
+                    listar();
+                }
+                else {
+                    $('#msgError #erroMsg').html(result.error);
+                    $('#errorModal').show();
+                }
+            },
+            error: function (error)
+            {
+                $('#msgError #erroMsg').html(error.error);
+                $('#errorModal').show();
+            },
+            datatype: 'json'
+        });
+    }
+
+    function removerProduto(id) {
+        fechar_alerta();
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                'id': id,
+            },
+            url: '@Url.Action("RemoverProduto", "Venda")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('#msgSucess #sucessMsg').html('Produto removido com sucesso.');
+                    $('#sucessModal').show();
+
+                    listar();
+                }
+                else {
+                    $('#msgError #erroMsg').html(result.error);
+                    $('#errorModal').show();
+                }
+            },
+            error: function (error)
+            {
+                $('#msgError #erroMsg').html(error.error);
+                $('#errorModal').show();
+            },
+            datatype: 'json'
+        });
+    }
 
 </script>

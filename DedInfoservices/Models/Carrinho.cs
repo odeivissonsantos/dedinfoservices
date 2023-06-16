@@ -31,5 +31,8 @@ namespace DedInfoservices.Models
 
         [Column("valor_final")]
         public decimal Valor_Final { get; set; }
+
+        [Column("sts_carrinho")]
+        public bool Sts_carrinho { get; set; } = true;
     }
 }
