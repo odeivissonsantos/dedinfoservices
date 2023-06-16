@@ -1,5 +1,8 @@
 ﻿using DedInfoservices.Context;
 using DedInfoservices.DTOs.Venda;
+using DedInfoservices.Enums;
+using DedInfoservices.Filters.Venda;
+using DedInfoservices.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +50,35 @@ namespace DedInfoservices.Services
             }
 
             return listVendas;
+        }
+
+        public void FinalizarVenda(FinalizarVendaFilter filter)
+        {
+            List<Carrinho> listCarrinho = _context.Carrinho.Where(x => x.Guuid_Carrinho == filter.Guuid_Carrinho && x.Sts_carrinho).ToList();
+
+            Venda venda = new()
+            {
+                Guuid_Venda = Guid.NewGuid().ToString(),
+                Guuid_Carrinho = filter.Guuid_Carrinho,
+                Guuid_Cliente = filter.Guuid_Cliente,
+                Guuid_Usuario_Inclusao = filter.Guuid_Usuario_Inclusao,
+                Valor_Total = listCarrinho.Select(x => x.Valor_Final).Sum(),
+                Qtd_Itens = listCarrinho.Count(),
+                Tipo_Pagamento = filter.Tipo_Pagamento,
+                Sts_Venda = true        
+            };
+
+            _context.Venda.Add(venda);
+
+            foreach (var item in listCarrinho)
+            {
+                item.Sts_carrinho = false;
+                _context.Carrinho.Update(item);
+            }
+
+            _context.SaveChanges();
+
+
         }
     }
 }

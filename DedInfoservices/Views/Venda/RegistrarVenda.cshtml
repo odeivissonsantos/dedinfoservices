@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Registrar Venda";
     Layout = "_Layout";
+    string pedido = @ViewBag.Guuid_Carrinho;
 }
 
 <link rel="stylesheet" href="~/css/venda.css" />
@@ -53,7 +54,7 @@
                     }
                 </select>
             </div>
-            <div class="col-sm-1">
+            <div class="col-sm-2">
                 <input type="text" placeholder="desconto" id="desconto" name="desconto" class="form-control" />
             </div>
 
@@ -61,40 +62,46 @@
                 <button type="button" class="btn btn-success" onclick="adicionarProduto();">Adicionar</button>
             </div>
 
-            </div>
-
-            <div class="row mt-2 mb-2">
-                <div class="col-sm-6">
-                    <label>Pedido: </label> <span id="numero_pedido"> @ViewBag.Guuid_Carrinho</span>
-                </div>
-
-                <div class="col-sm-3">
-                    <span id="pedido"></span>
-                </div>
-            </div>
-
-            <table id="list_items" class="table table-bordered table-striped">
-                <thead class="table-info">
-                    <tr>
-                        <th>Produto</th>
-                        <th>Valor</th>
-                        <th>Desconto (%)</th>
-                        <th>Valor Final</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-                <tfoot class="table-info">
-                    <tr>
-                        <th>Produto</th>
-                        <th>Valor</th>
-                        <th>Desconto (%)</th>
-                        <th>Valor Final</th>
-                        <th>Ação</th>
-                    </tr>
-                </tfoot>
-            </table>
         </div>
+
+        <div class="row mt-2 mb-2">
+            <div class="col-sm-6">
+                <label>Pedido: </label> <span id="numero_pedido">@ViewBag.Guuid_Carrinho</span>
+            </div>
+
+            <div class="col-sm-3">
+                <span id="pedido"></span>
+            </div>
+        </div>
+
+        <div class="row mt-2 mb-4">
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-primary" onclick="finalizarVenda();">Finalizar Venda</button>
+            </div>
+        </div>
+
+        <table id="list_items" class="table table-bordered table-striped">
+            <thead class="table-info">
+                <tr>
+                    <th>Produto</th>
+                    <th>Valor</th>
+                    <th>Desconto (%)</th>
+                    <th>Valor Final</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot class="table-info">
+                <tr>
+                    <th>Produto</th>
+                    <th>Valor</th>
+                    <th>Desconto (%)</th>
+                    <th>Valor Final</th>
+                    <th>Ação</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 
 
 </section>
@@ -132,11 +139,12 @@
 
     function adicionarProduto() {
         fechar_alerta();
+        let Guuid_Carrinho = '@pedido';
 
         $.ajax({
             type: 'POST',
             data: {
-                'Guuid_Carrinho': $('#numero_pedido').val(),
+                'Guuid_Carrinho': Guuid_Carrinho,
                 'Guuid_Cliente': $('#guuid_cliente').val(),
                 'Guuid_Produto': $('#select-produtos').val(),
                 'Desconto': $('#desconto').val(),
@@ -147,6 +155,7 @@
                     $('#msgSucess #sucessMsg').html('Produto adicionado com sucesso.');
                     $('#sucessModal').show();
                     $('#desconto').val('');
+                    window.location.reload();
 
                     listar();
                 }
@@ -178,7 +187,40 @@
                     $('#msgSucess #sucessMsg').html('Produto removido com sucesso.');
                     $('#sucessModal').show();
 
-                    listar();
+                    window.location.reload();
+                }
+                else {
+                    $('#msgError #erroMsg').html(result.error);
+                    $('#errorModal').show();
+                }
+            },
+            error: function (error)
+            {
+                $('#msgError #erroMsg').html(error.error);
+                $('#errorModal').show();
+            },
+            datatype: 'json'
+        });
+    }
+
+        function finalizarVenda() {
+        fechar_alerta();
+        let Guuid_Carrinho = '@pedido';
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                'Guuid_Carrinho': Guuid_Carrinho,
+                'Guuid_Cliente': $('#guuid_cliente').val(),
+                'Tipo_Pagamento': $('#select-tipo-pagamento').val(),
+            },
+            url: '@Url.Action("FinalizarVenda", "Venda")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('#msgSucess #sucessMsg').html('Venda finalizada com sucesso.');
+                    $('#sucessModal').show();
+                    window.location.href = '@Url.Action("Index", "Venda")';
+
                 }
                 else {
                     $('#msgError #erroMsg').html(result.error);

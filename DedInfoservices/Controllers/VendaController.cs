@@ -60,7 +60,6 @@ namespace DedInfoservices.Controllers
             var data = aList.Select(x => new
             {
                 nome_cliente = x.Nome_Cliente,
-                nome_usuario_inclusao = x.Nome_Usuario_Inclusao,
                 data_inclusao = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),
                 qtd_itens = x.Qtd_Itens,
                 tipo_pagamento = DescriptionEnum.GetEnumDescription((TipoPagamentoEnum)x.Tipo_Pagamento),
@@ -92,7 +91,7 @@ namespace DedInfoservices.Controllers
 
             var data = aList.Select(x => new
             {
-                produto = x.Guuid_Produto,
+                produto = _produtoService.BuscarProduto(x.Guuid_Produto).Nome,
                 valor_produto = x.Produto_Valor_Unitario,
                 desconto = x.Desconto,
                 valor_final = x.Valor_Final,
@@ -151,6 +150,29 @@ namespace DedInfoservices.Controllers
                 is_action = _carrinhoService.RemoverProduto(id);
 
                 if (!is_action) throw new Exception("Não foi possível rmover o produto, tente novamente mais tarde.");
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+            }
+
+            return Json(new { is_action, error });
+        }
+
+        [HttpPost]
+        public IActionResult FinalizarVenda(FinalizarVendaFilter filter)
+        {
+            string error = "";
+            bool is_action = false;
+
+            try
+            {
+                if (string.IsNullOrEmpty(filter.Guuid_Carrinho)) throw new Exception("Adicione 1 produto para finalizar a venda.");
+                filter.Guuid_Usuario_Inclusao = CurrentUser.Guuid;
+                filter.Tipo_Pagamento = TipoPagamentoEnum.Pix;
+                _vendaService.FinalizarVenda(filter);
+
+                is_action = true;
             }
             catch (Exception ex)
             {

@@ -52,6 +52,7 @@ namespace DedInfoservices.Services
 
             if (query != null)
             {
+                query.Sts_carrinho = false;
                 _context.Carrinho.Update(query);
                 _context.SaveChanges();
                 result = true;
