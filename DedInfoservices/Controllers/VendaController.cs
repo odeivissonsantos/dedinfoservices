@@ -55,7 +55,7 @@ namespace DedInfoservices.Controllers
 
             int recordsTotal = query.Count();
 
-            List<VendaDTO> aList = query.OrderBy(x => x.Dtc_Inclusao).Skip(iDisplayStart).Take(iDisplayLength).ToList();
+            List<VendaDTO> aList = query.OrderByDescending(x => x.Dtc_Inclusao).Skip(iDisplayStart).Take(iDisplayLength).ToList();
 
             var data = aList.Select(x => new
             {
@@ -64,8 +64,8 @@ namespace DedInfoservices.Controllers
                 qtd_itens = x.Qtd_Itens,
                 tipo_pagamento = DescriptionEnum.GetEnumDescription((TipoPagamentoEnum)x.Tipo_Pagamento),
                 valor_total = x.Valor_Total,
-                sts_venda = x.Sts_Venda ? "Pago" : "Pendente",
-                acao = !x.Sts_Exclusao ? "" : $"<a href='#' type='button' class='btn btn-danger' onclick='desativar(\"{x.Guuid_Venda}\")'>Cancelar</a>"
+                sts_venda = x.Sts_Venda ? "Finalizada" : "Cancelada",
+                acao = !x.Sts_Exclusao ? $"<a href='#' type='button' class='btn btn-danger' onclick='cancelarVenda(\"{x.Guuid_Venda}\")'>Cancelar</a>" : ""
             }).ToArray();
 
             return Json(new
