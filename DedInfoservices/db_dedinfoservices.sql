@@ -64,9 +64,39 @@ CREATE TABLE [produto] (
 	descricao varchar(150) NULL,
 	dtc_inclusao datetime NOT NULL,
 	sts_exclusao bit NOT NULL,
-  CONSTRAINT [PK_PRODUTO] PRIMARY KEY CLUSTERED
+  CONSTRAINT [PK_PRODUTO_ESTOQUE] PRIMARY KEY CLUSTERED
   (
   ide_produto ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+GO
+
+CREATE TABLE [produto_estoque] (
+	ide_produto_estoque bigint IDENTITY(1,1) NOT NULL,
+	guuid_produto varchar(max) NOT NULL,
+	quantidade bigint NOT NULL,
+	dtc_atualizacao datetime NOT NULL,
+  CONSTRAINT [PK_PRODUTO_ESTOQUE] PRIMARY KEY CLUSTERED
+  (
+  ide_produto_estoque ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+GO
+
+CREATE TABLE [produto_entrada] (
+	ide_produto_entrada bigint IDENTITY(1,1) NOT NULL,
+	guuid_produto varchar(max) NOT NULL,
+	guuid_usuario_inclusao varchar(max) NOT NULL,
+	preco_compra decimal(5,2) NOT NULL,
+	quantidade bigint NOT NULL,
+	dtc_inclusao datetime NOT NULL,
+	dtc_compra datetime NOT NULL,
+	dtc_recebimento datetime NOT NULL,
+  CONSTRAINT [PK_PRODUTO_ENTRADA] PRIMARY KEY CLUSTERED
+  (
+  ide_produto_entrada ASC
   ) WITH (IGNORE_DUP_KEY = OFF)
 
 )
@@ -135,6 +165,11 @@ INSERT INTO produto(guuid, nome, valor, codigo_interno, codigo_barras, descricao
 VALUES
 ('c5f7ef8b-9faa-43d6-918e-cf8b2196bb4c', 'Y50 Preto e Vermelho', 45.01, 70001, 78912357899, 'Avaria na tampa', GETDATE(), 0),
 ('45484dfc-036e-45dc-b6d0-5c878736e048', 'Pro6 Branco', 59.99, 70002, NULL, NULL, GETDATE(), 0)
+
+INSERT INTO produto_estoque(guuid_produto, quantidade, dtc_atualizacao)
+VALUES
+('c5f7ef8b-9faa-43d6-918e-cf8b2196bb4c', 0, GETDATE()),
+('45484dfc-036e-45dc-b6d0-5c878736e048', 0, GETDATE())
 
 
 

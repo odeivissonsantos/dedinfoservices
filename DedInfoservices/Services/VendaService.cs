@@ -68,12 +68,22 @@ namespace DedInfoservices.Services
                 Sts_Venda = true        
             };
 
+
             _context.Venda.Add(venda);
 
             foreach (var item in listCarrinho)
             {
+                var query = _context.ProdutoEstoque.Where(x => x.Guuid_Produto == item.Guuid_Produto).FirstOrDefault();
+                if(query != null)
+                {
+                    query.Quantidade--;
+                    query.Dtc_Atualizacao = DateTime.Now;
+                }
+                _context.ProdutoEstoque.Update(query);
+
                 item.Sts_carrinho = false;
                 _context.Carrinho.Update(item);
+
             }
 
             _context.SaveChanges();

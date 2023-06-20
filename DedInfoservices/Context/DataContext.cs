@@ -22,6 +22,7 @@ namespace DedInfoservices.Context
         public DbSet<Cliente> Cliente { get; set; }
         public DbSet<Carrinho> Carrinho { get; set; }
         public DbSet<Venda> Venda { get; set; }
-
+        public DbSet<ProdutoEstoque> ProdutoEstoque { get; set; }
+        public DbSet<ProdutoEntrada> ProdutoEntrada { get; set; }
     }
 }
