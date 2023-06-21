@@ -1,4 +1,5 @@
-﻿@{
+﻿@using DedInfoservices.Enums;
+@{
     ViewData["Title"] = "Usuários";
     Layout = "_Layout";
 }
@@ -30,7 +31,7 @@
         </div>
 
         <div class="form-group mt-3 mb-3" style="display: table;">
-            <a href="@Url.Action("UsuarioSalvar", "Usuario")" class="btn btn-success" style="color:white;">Novo</a>
+            <button type="button" onclick="modalNovoUsuario();" class="btn btn-success" style="color:white;">Novo</button>
         </div>
 
         <table id="list_items" class="table table-bordered table-striped">
@@ -58,6 +59,71 @@
                 </tr>
             </tfoot>
         </table>
+    </div>
+
+    <div id="modalNovoUsuario" class="modalNovoUsuario">
+        <div class="modal fade" id="modal-Novo-Usuario" aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-centered" role="document">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Novo Usuário</h3>
+                        <button class="btn-close" id="fechar" onclick="modalfechar()"></button>
+                    </div>
+
+                    <div class="container col-sm-12 mt-1">
+                        <div id="errorModal-novo-usuario" style="display: none">
+                            <div id="msgError-novo-usuario" class="alert alert-danger alert-dismissible fade show">
+                                <i class="fa fa-ban"></i>
+                                <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                                <span id="erroMsg-novo-usuario"></span>
+                            </div>
+                        </div>
+                        <div id="sucessModal-novo-usuario" style="display: none">
+                            <div id="msgSucess-novo-usuario" class="alert alert-success alert-dismissible fade show">
+                                <i class="fa fa-check"></i>
+                                <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                                <span id="sucessMsg-novo-usuario"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="nome">Nome (*)</label>
+                                <input type="text" placeholder="Nome do Usuário" id="nome" name="nome" class="form-control">
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="sobrenome">Sobrenome (*)</label>
+                                <input type="text" placeholder="Sobrenome do Usuário" id="sobrenome" name="sobrenome" class="form-control" required>
+                            </div>
+
+                            <div class="form-group col-sm-6 mt-3">
+                                <label for="nome">Email (*)</label>
+                                <input type="email" placeholder="Email do Usuário" id="email" name="email" class="form-control">
+                            </div>
+
+                            <div class="form-group col-sm-6 mt-3">
+                                <label for="perfil">Perfil (*)</label>
+                                <select id="perfil" name="perfil" class="form-control">
+                                    <option value="">Selecione...</option>
+                                    <option value="@PerfilEnum.Admin">Administrador</option>
+                                    <option value="@PerfilEnum.Padrao">Padrão</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button id="btn-confirmar" class="btn btn-success pull-right" onclick="SalvarUsuario();">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -153,6 +219,58 @@
     function fechar_alerta() {
         $('#errorModal').hide();
         $('#sucessModal').hide();
+        $('#errorModal-novo-usuario').hide();
+        $('#sucessModal-novo-usuario').hide();
+    }
+
+    function modalNovoUsuario() {
+        $('#modal-Novo-Usuario').modal('show');
+    }
+
+    function modalfechar() {
+        $('#modal-Novo-Usuario').modal('hide');
+    }
+
+
+    function SalvarUsuario() {
+        fechar_alerta();
+        if ($('#perfil').val() === '') {
+            $('#msgError-novo-usuario #erroMsg-novo-usuario').html('Selecione um perfil.');
+            $('#errorModal-novo-usuario').show();
+        };
+        $.ajax({
+            type: 'POST',
+            data: {
+                'Nome': $('#nome').val(),
+                'Sobrenome': $('#sobrenome').val(),
+                'Email': $('#email').val(),
+                'Perfil': $('#perfil').val()
+            },
+            url: '@Url.Action("SalvarUsuario", "Usuario")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('#msgSucess-novo-usuario #sucessMsg-novo-usuario').html('Usuário adicionado com sucesso.');
+                    $('#sucessModal-novo-usuario').show();
+
+                    $('#nome').val('');
+                    $('#sobrenome').val('');
+                    $('#email').val('');
+                    $('#perfil').val('');
+
+                    listar();
+                }
+                else {
+                    $('#msgError-novo-usuario #erroMsg-novo-usuario').html(result.error);
+                    $('#errorModal-novo-usuario').show();
+                }
+            },
+            error: function (error)
+            {
+                $('#msgError-novo-usuario #erroMsg-novo-usuario').html(error.error);
+                $('#errorModal-novo-usuario').show();
+            },
+            datatype: 'json'
+        });
     }
 
 

@@ -58,6 +58,16 @@ namespace DedInfoservices.Services
             {
                 produto.Guuid = Guid.NewGuid().ToString();
                 _context.Produto.Add(produto);
+
+
+                ProdutoEstoque produtoEstoque = new()
+                {
+                    Guuid_Produto = produto.Guuid,
+                    Dtc_Atualizacao = DateTime.Now,
+                    Quantidade = 0
+                };
+
+                _context.ProdutoEstoque.Add(produtoEstoque);
             }
             else
             {
@@ -65,6 +75,7 @@ namespace DedInfoservices.Services
             }
 
             _context.SaveChanges();
+
 
         }
 

@@ -64,7 +64,7 @@ CREATE TABLE [produto] (
 	descricao varchar(150) NULL,
 	dtc_inclusao datetime NOT NULL,
 	sts_exclusao bit NOT NULL,
-  CONSTRAINT [PK_PRODUTO_ESTOQUE] PRIMARY KEY CLUSTERED
+  CONSTRAINT [PK_PRODUTO] PRIMARY KEY CLUSTERED
   (
   ide_produto ASC
   ) WITH (IGNORE_DUP_KEY = OFF)
