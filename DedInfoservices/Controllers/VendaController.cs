@@ -63,7 +63,7 @@ namespace DedInfoservices.Controllers
                 data_inclusao = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),
                 qtd_itens = x.Qtd_Itens,
                 tipo_pagamento = DescriptionEnum.GetEnumDescription((TipoPagamentoEnum)x.Tipo_Pagamento),
-                valor_total = x.Valor_Total,
+                valor_total = "R$ " + x.Valor_Total.ToString(),
                 sts_venda = x.Sts_Venda ? "Finalizada" : "Cancelada",
                 acao = !x.Sts_Exclusao ? $"<a href='#' type='button' class='btn btn-danger' onclick='cancelarVenda(\"{x.Guuid_Venda}\")'>Cancelar</a>" : ""
             }).ToArray();

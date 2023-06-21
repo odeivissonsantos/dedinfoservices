@@ -1,0 +1,218 @@
+﻿@{
+    ViewData["Title"] = "Estoque";
+    Layout = "_Layout";
+}
+
+
+<section>
+    <div class="text-center container">
+        <br />
+        <h2>Estoque</h2>
+
+        <div>
+            <div id="errorModal" style="display: none">
+                <div id="msgError" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fa fa-ban"></i>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+
+                    <span id="erroMsg"></span>
+                </div>
+            </div>
+            <div id="sucessModal" style="display: none">
+                <div id="msgSucess" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fa fa-check"></i>
+                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+
+                    <span id="sucessMsg"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mt-3 mb-3" style="display: table;">
+            <button type="button" onclick="modalNovaEntrada();" class="btn btn-success" sstyle="color:white">Novo</button>
+        </div>
+
+        <table id="list_items" class="table table-bordered table-striped">
+            <thead class="table-info">
+                <tr>
+                    <th>Produto</th>
+                    <th>Preço de Compra</th>
+                    <th>Quantidade</th>
+                    <th>Data Compra</th>
+                    <th>Data Receb.</th>
+                    <th>Data Cadastro</th>
+                    <th>Usuário Inc.</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot class="table-info">
+                <tr>
+                    <th>Produto</th>
+                    <th>Preço de Compra</th>
+                    <th>Quantidade</th>
+                    <th>Data Compra</th>
+                    <th>Data Receb.</th>
+                    <th>Data Cadastro</th>
+                    <th>Usuário Inc.</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div id="modalNovaEntrada" class="modalNovaEntrada">
+        <div class="modal fade" id="modal-Nova-Entrada" aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-centered" role="document">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Nova Entrada</h3>
+                        <button class="btn-close" id="fechar" onclick="modalfechar()"></button>
+                    </div>
+
+                    <div class="container col-sm-12 mt-1">
+                        <div id="errorModal-entrada" style="display: none">
+                            <div id="msgError-entrada" class="alert alert-danger alert-dismissible fade show">
+                                <i class="fa fa-ban"></i>
+                                <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                                <span id="erroMsg-entrada"></span>
+                            </div>
+                        </div>
+                        <div id="sucessModal-entrada" style="display: none">
+                            <div id="msgSucess-entrada" class="alert alert-success alert-dismissible fade show">
+                                <i class="fa fa-check"></i>
+                                <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                                <span id="sucessMsg-entrada"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="control-label">Produto (*):</label>
+                                <select id="select-produtos" class="form-select">
+                                    @foreach (var item in @ViewBag.Produtos)
+                                    {
+                                        <option value="@item.Guuid">@item.Nome</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-sm-6 mt-2">
+                                <label class="control-label">Preço de Compra (*):</label>
+                                <input type="text" class="form-control" maxlength="8" id="preco_compra" required>
+
+                            </div>
+
+                            <div class="col-sm-6 mt-2">
+                                <label class="control-label"> Quantidade (*):</label>
+                                <input type="text" class="form-control" id="quantidade" required>
+                            </div>
+
+                            <div class="col-sm-6 mt-2">
+                                <label class="control-label"> Data de Compra (*):</label>
+                                <input type="date" class="form-control" id="dtc_compra" required>
+                            </div>
+
+                            <div class="col-sm-6 mt-2">
+                                <label class="control-label"> Data de Recebimento (*):</label>
+                                <input type="date" class="form-control" id="dtc_recebimento" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button id="btn-confirmar" class="btn btn-success pull-right" onclick="RegistrarEntrada();">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        listar();
+    });
+
+    function listar() {
+        $('#list_items').dataTable({
+            'bPaginate': true,
+            'bJQueryUI': true,
+            'bProcessing': true,
+            'bServerSide': true,
+            "searching": true,
+            'bDestroy': true,
+            'sAjaxSource': `@Url.Action("EntradaProdutosPagination", "Estoque")`,
+            'sServerMethod': 'POST',
+            'aoColumns': [
+                { 'mData': 'produto' },
+                { 'mData': 'preco_compra' },
+                { 'mData': 'quantidade' },
+                { 'mData': 'dtc_compra' },
+                { 'mData': 'dtc_recebimento' },
+                { 'mData': 'data_cadastro' },
+                { 'mData': 'usuario_inclusao' }
+            ],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
+            }
+        });
+    };
+
+    function modalNovaEntrada() {
+        $('#modal-Nova-Entrada').modal('show');
+    }
+
+    function modalfechar() {
+        $('#modal-Nova-Entrada').modal('hide');
+    }
+
+    function RegistrarEntrada() {
+        fechar_alerta();
+        $('#msgError #erroMsg').html();
+        $('#item_form #msgError').hide();
+        $.ajax({
+            type: 'POST',
+            data: {
+                'Guuid_Produto': $('#select-produtos').val(),
+                'Preco_Compra': $('#preco_compra').val(),
+                'Quantidade': $('#quantidade').val(),
+                'Dtc_Compra': $('#dtc_compra').val(),
+                'Dtc_Recebimento': $('#dtc_recebimento').val(),
+            },
+            url: '@Url.Action("RegistrarEntrada", "Estoque")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('.overlay').hide();
+                    $('#sucessMsg-entrada').html('Entrada de produto registrada com sucesso!!!');
+                    $('#sucessModal-entrada').show();
+                    $('#preco_compra').val('');
+                    $('#quantidade').val('');
+                    $('#dtc_compra').val('');
+                    $('#dtc_recebimento').val('');
+                    listar();
+                }
+                else {
+                    $('#msgError-entrada #erroMsg-entrada').html(result.error);
+                    $('#errorModal-entrada').show();
+                }
+            },
+            error: function (error) {
+                $('#msgError-entrada #erroMsg-entrada').html(error.responseJSON.message);
+                $('#errorModal-entrada').show();
+            },
+        });
+    }
+
+    function fechar_alerta() {
+        $('#errorModal-entrada').hide();
+        $('#sucessModal-entrada').hide();
+    }
+
+</script>

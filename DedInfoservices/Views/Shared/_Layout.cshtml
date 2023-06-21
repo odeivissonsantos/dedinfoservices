@@ -77,15 +77,16 @@
 
                             <li class="nav-item mt-3">
                                 <div class="nav-link @(actionName.ToUpper() == "INDEX" && controllerName.ToUpper() == "VENDA" ? "active" : string.Empty)">
-                                    <a href="@Url.Action("Index", "Venda")"><i class="fa-solid fa-layer-group p-3"></i>Venda</a>
+                                    <a href="@Url.Action("Index", "Venda")"><i class="fa-solid fa-shopping-cart p-3"></i>Venda</a>
                                 </div>
                             </li>
 
-                            <li class="nav-item mt-5">
-                                <div class="nav-link">
-                                    <a class="btn" onclick="Sair();"><i class="fa-solid fa-sign-out-alt p-3"></i>Sair</a>
+                            <li class="nav-item mt-3">
+                                <div class="nav-link @(actionName.ToUpper() == "INDEX" && controllerName.ToUpper() == "ESTOQUE" ? "active" : string.Empty)">
+                                    <a href="@Url.Action("Index", "Estoque")"><i class="fa-solid fa-dolly p-3"></i>Estoque</a>
                                 </div>
                             </li>
+
                         </ul>
 
                     </div>

@@ -68,6 +68,12 @@ namespace DedInfoservices.Services
 
         }
 
+
+        public List<ProdutoEntrada> ListarTodasEntradasProduto()
+        {
+            return _context.ProdutoEntrada.ToList();
+        }
+
         public bool EntradaProduto(EntradaProdutoFilter filter)
         {
             bool result = false;
@@ -84,10 +90,10 @@ namespace DedInfoservices.Services
                 Preco_Compra = filter.Preco_Compra,
                 Dtc_Compra = filter.Dtc_Compra,
                 Dtc_Recebimento = filter.Dtc_Recebimento,
-                Quantidade = 1
+                Quantidade = filter.Quantidade
             };
 
-            query.Quantidade++;
+            query.Quantidade = query.Quantidade + filter.Quantidade;
             query.Dtc_Atualizacao = DateTime.Now;
 
             _context.ProdutoEntrada.Add(newEntrada);
@@ -97,6 +103,11 @@ namespace DedInfoservices.Services
             if (newEntrada.Ide_Produto_Entrada > 0) result = true;
 
             return result;
+        }
+
+        public ProdutoEstoque BuscarEstoque(string guuid)
+        {
+            return _context.ProdutoEstoque.Where(x => x.Guuid_Produto == guuid).FirstOrDefault();
         }
     }
 }

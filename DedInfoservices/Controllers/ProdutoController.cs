@@ -78,6 +78,7 @@ namespace DedInfoservices.Controllers
                 codigo_interno = x.Codigo_Interno,
                 codigo_barras = x.Codigo_Barras.HasValue ? x.Codigo_Barras.ToString() : "N/C",
                 descricao = string.IsNullOrEmpty(x.Descricao) ? "N/C" : x.Descricao,
+                estoque = _produtoService.BuscarEstoque(x.Guuid).Quantidade,
                 data_cadastro = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),               
                 valor_unitario = "R$ " + x.Valor.ToString(),
                 editar = $"<a href='{Url.Action("ProdutoSalvar", "Produto")}?guuid={x.Guuid}' type='button' class='btn btn-warning'>Editar</a>",
