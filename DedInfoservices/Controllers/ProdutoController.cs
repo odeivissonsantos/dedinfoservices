@@ -80,8 +80,8 @@ namespace DedInfoservices.Controllers
                 descricao = string.IsNullOrEmpty(x.Descricao) ? "N/C" : x.Descricao,
                 estoque = _produtoService.BuscarEstoque(x.Guuid).Quantidade,
                 data_cadastro = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),               
-                valor_unitario = "R$ " + x.Valor.ToString(),
-                editar = $"<a href='{Url.Action("ProdutoSalvar", "Produto")}?guuid={x.Guuid}' type='button' class='btn btn-warning'>Editar</a>",
+                valor_unitario = "R$ " + x.Valor.ToString().Replace(".", ","),
+                editar = x.Sts_Exclusao == true ? $"<button type='button' class='btn btn-secondary' disabled>Editar</button>" : $"<a href='{Url.Action("ProdutoSalvar", "Produto")}?guuid={x.Guuid}' type='button' class='btn btn-warning'>Editar</a>",
                 acao = x.Sts_Exclusao == true ? $"<a href='#' type='button' class='btn btn-primary' onclick='reativar(\"{x.Guuid}\")'>Ativar</a>" : $"<a href='#' type='button' class='btn btn-danger' onclick='desativar(\"{x.Guuid}\")'>Desativar</a>"
             }).ToArray();
 

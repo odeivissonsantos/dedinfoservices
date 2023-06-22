@@ -58,7 +58,7 @@ namespace DedInfoservices.Controllers
                 data_cadastro = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),
                 qtd_acessos = x.Qtd_Acessos,
                 data_ultimo_acesso = x.Dtc_Ultimo_Acesso.HasValue ? x.Dtc_Ultimo_Acesso.Value.ToString("dd/MM/yyy HH:mm") : "",
-                editar = $"<a href='{Url.Action("UsuarioSalvar", "Usuario")}?guuid={x.Guuid}' type='button' class='btn btn-warning'>Editar</a>",
+                editar = x.Sts_Exclusao == true ? $"<button type='button' class='btn btn-secondary' disabled>Editar</button>" : $"<a href='{Url.Action("UsuarioSalvar", "Usuario")}?guuid={x.Guuid}' type='button' class='btn btn-warning'>Editar</a>",
                 acao = x.Sts_Exclusao == true ? $"<a href='#' type='button' class='btn btn-primary' onclick='reativar(\"{x.Guuid}\")'>Ativar</a>" : $"<a href='#' type='button' class='btn btn-danger' onclick='desativar(\"{x.Guuid}\")'>Desativar</a>"
             }).ToArray();
 

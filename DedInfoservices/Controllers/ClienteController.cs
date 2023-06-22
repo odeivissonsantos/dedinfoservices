@@ -53,7 +53,7 @@ namespace DedInfoservices.Controllers
                 telefone = x.Telefone,
                 is_whatsapp = x.Is_Whatsapp ? "SIM" : "NÃO",
                 data_cadastro = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),
-                editar = $"<a href='{Url.Action("ClienteSalvar", "Cliente")}?guuid={x.Guuid}' type='button' class='btn btn-warning'>Editar</a>",
+                editar = x.Sts_Exclusao == true ? $"<button type='button' class='btn btn-secondary' disabled>Editar</button>" : $"<a href='{Url.Action("ClienteSalvar", "Cliente")}?guuid={x.Guuid}' type='button' class='btn btn-warning'>Editar</a>",
                 acao = x.Sts_Exclusao ? $"<a href='#' type='button' class='btn btn-primary' onclick='reativar(\"{x.Guuid}\")'>Ativar</a>" : $"<a href='#' type='button' class='btn btn-danger' onclick='desativar(\"{x.Guuid}\")'>Desativar</a>"
             }).ToArray();
 

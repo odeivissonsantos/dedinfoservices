@@ -38,7 +38,7 @@ namespace DedInfoservices.Controllers
         public IActionResult RegistrarVenda(string guuid_cliente)
         {
             ViewBag.Cliente = _clienteService.ListarTodos().Where(x => x.Guuid == guuid_cliente).FirstOrDefault();
-            ViewBag.Produtos = _produtoService.ListarTodos().Where(x => !x.Sts_Exclusao).ToList();
+            ViewBag.Produtos = _produtoService.ListarTodos().Where(x => !x.Sts_Exclusao).OrderBy(x => x.Nome).ToList();
             var guuid_carrinho = _carrinhoService.BuscarCarrinhoPorCliente(guuid_cliente).FirstOrDefault();
             ViewBag.Guuid_Carrinho = guuid_carrinho == null ? "" : guuid_carrinho.Guuid_Carrinho;
             return View();
@@ -63,9 +63,9 @@ namespace DedInfoservices.Controllers
                 data_inclusao = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),
                 qtd_itens = x.Qtd_Itens,
                 tipo_pagamento = DescriptionEnum.GetEnumDescription((TipoPagamentoEnum)x.Tipo_Pagamento),
-                valor_total = "R$ " + x.Valor_Total.ToString(),
+                valor_total = "R$ " + x.Valor_Total.ToString().Replace(".", ","),
                 sts_venda = x.Sts_Venda ? "Finalizada" : "Cancelada",
-                acao = !x.Sts_Exclusao ? $"<a href='#' type='button' class='btn btn-danger' onclick='cancelarVenda(\"{x.Guuid_Venda}\")'>Cancelar</a>" : ""
+                acao = !x.Sts_Exclusao ? $"<a href='#' type='button' class='btn btn-danger' onclick='cancelarVenda(\"{x.Guuid_Venda}\")'>Cancelar</a>" : $"<button type='button' class='btn btn-secondary'>Cancelar</button>"
             }).ToArray();
 
             return Json(new
@@ -92,9 +92,9 @@ namespace DedInfoservices.Controllers
             var data = aList.Select(x => new
             {
                 produto = _produtoService.BuscarProduto(x.Guuid_Produto).Nome,
-                valor_produto = x.Produto_Valor_Unitario,
-                desconto = x.Desconto,
-                valor_final = x.Valor_Final,
+                valor_produto = "R$ " + x.Produto_Valor_Unitario.ToString().Replace(".", ","),
+                desconto = x.Desconto + " %",
+                valor_final = "R$ " + x.Valor_Final.ToString().Replace(".", ","),
                 acao = $"<a href='#' type='button' class='btn btn-danger' onclick='removerProduto(\"{x.Ide_Carrinho}\")'>Remover</a>"
             }).ToArray();
 

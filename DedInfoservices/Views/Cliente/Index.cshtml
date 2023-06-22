@@ -30,7 +30,7 @@
         </div>
 
         <div class="form-group mt-3 mb-3" style="display: table;">
-            <a href="@Url.Action("ClienteSalvar", "Cliente")" class="btn btn-success" color:white;">Novo</a>
+            <button type="button" onclick="modalCliente()" class="btn btn-success" sstyle="color:white;">Novo</button>
         </div>
 
         <table id="list_items" class="table table-bordered table-striped">
@@ -60,6 +60,73 @@
         </table>
     </div>
 
+    <div id="modalCliente" class="modalCliente">
+        <div class="modal fade" id="modal-Cliente" aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-centered" role="document">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Novo Cliente</h3>
+                        <button class="btn-close" id="fechar" onclick="modalfechar()"></button>
+                    </div>
+
+                    <div class="container col-sm-12 mt-1">
+                        <div id="errorModal-cliente" style="display: none">
+                            <div id="msgError-cliente" class="alert alert-danger alert-dismissible fade show">
+                                <i class="fa fa-ban"></i>
+                                <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                                <span id="erroMsg-cliente"></span>
+                            </div>
+                        </div>
+                        <div id="sucessModal-cliente" style="display: none">
+                            <div id="msgSucess-cliente" class="alert alert-success alert-dismissible fade show">
+                                <i class="fa fa-check"></i>
+                                <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                                <span id="sucessMsg-cliente"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="nome">Nome (*)</label>
+                                <input type="text" placeholder="Nome do Cliente" id="nome" name="nome"  class="form-control" required>
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="sobrenome">Sobrenome</label>
+                                <input type="text" placeholder="Sobrenome do Cliente" id="sobrenome" name="sobrenome"  class="form-control">
+                            </div>
+
+
+                            <div class="form-group col-sm-6  mt-4">
+                                <label for="nome">Telefone (*)</label>
+                                <input type="text" placeholder="Telefone do Cliente" id="telefone" name="telefone" class="form-control" maxlength="11" required>
+                            </div>
+
+                            <div class="form-group col-sm-6  mt-4">
+                                <label for="email">Email</label>
+                                <input type="email" placeholder="Email do Cliente" id="email" name="email" class="form-control">
+                            </div>
+
+                            <div class="form-group col-sm-12 text-start mt-2">
+                                <input type="checkbox" id="is_whatsapp" name="is_whatsapp" />
+                                <label for="is_whatsapp">Marque aqui se este telefone também for whatsapp</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button id="btn-confirmar" class="btn btn-success pull-right" onclick="SalvarCliente();">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </section>
 
@@ -68,6 +135,17 @@
     $(document).ready(function () {
         listar();
     });
+
+    $('#telefone').on('keypress', maskNumber);
+
+    function maskNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if ((charCode > 31 && charCode < 48) || charCode > 57) {
+            return false;
+        }
+        return true;
+    }
 
     function listar() {
         $('#list_items').dataTable({
@@ -93,6 +171,54 @@
             }
         });
     };
+
+    function modalCliente() {
+        $('#modal-Cliente').modal('show');
+    }
+
+    function modalfechar() {
+        $('#modal-Cliente').modal('hide');
+    }
+
+
+    function SalvarCliente() {
+        fechar_alerta();
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                'Nome': $('#nome').val(),
+                'Sobrenome': $('#sobrenome').val(),
+                'Email': $('#email').val(),
+                'Telefone': $('#telefone').val(),
+                'Is_Whatsapp': $('#is_whatsapp').is(':checked')
+            },
+            url: '@Url.Action("SalvarCliente", "Cliente")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('#msgSucess-cliente #sucessMsg-cliente').html('Cliente adicionado com sucesso.');
+                    $('#sucessModal-cliente').show();
+
+                    $('#nome').val('');
+                    $('#sobrenome').val('');
+                    $('#email').val('');
+                    $('#telefone').val('');
+
+                    listar();
+                }
+                else {
+                    $('#msgError-cliente #erroMsg-cliente').html(result.error);
+                    $('#errorModal-cliente').show();
+                }
+            },
+            error: function (error)
+            {
+                $('#msgError #erroMsg').html(error.error);
+                $('#errorModal').show();
+            },
+            datatype: 'json'
+        });
+    }
 
     function reativar(guuid) {
         fechar_alerta();
@@ -137,8 +263,8 @@
                     listar();
                 }
                 else {
-                    $('#msgError #erroMsg').html(result.error);
-                    $('#errorModal').show();
+                    $('#msgError-cliente #erroMsg-cliente').html(result.error);
+                    $('#errorModal-cliente').show();
                 }
             },
             error: function (error)
@@ -153,6 +279,8 @@
     function fechar_alerta() {
         $('#errorModal').hide();
         $('#sucessModal').hide();
+        $('#errorModal-cliente').hide();
+        $('#sucessModal-cliente').hide();
     }
 
 

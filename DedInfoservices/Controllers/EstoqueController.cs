@@ -37,7 +37,7 @@ namespace DedInfoservices.Controllers
             var data = aList.Select(x => new
             {
                 produto = _produtoService.BuscarProduto(x.Guuid_Produto).Nome,
-                preco_compra = "R$ " + x.Preco_Compra.ToString(),
+                preco_compra = "R$ " + x.Preco_Compra.ToString().Replace(".", ","),
                 quantidade = x.Quantidade,
                 dtc_compra = x.Dtc_Compra.ToString("dd/MM/yyy HH:mm"),
                 dtc_recebimento = x.Dtc_Recebimento.ToString("dd/MM/yyy HH:mm"),
