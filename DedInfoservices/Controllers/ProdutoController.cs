@@ -43,7 +43,7 @@ namespace DedInfoservices.Controllers
             try
             {
                 if (string.IsNullOrEmpty(filter.Nome)) throw new Exception("Campo Nome é obrigatório.");
-                if (filter.Valor <= 0) throw new Exception("Campo Sobrenome é obrigatório.");
+                if (string.IsNullOrEmpty(filter.Valor)) throw new Exception("Campo Sobrenome é obrigatório.");
 
                 _produtoService.SalvarProduto(filter);
 

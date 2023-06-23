@@ -13,8 +13,12 @@ namespace DedInfoservices.Enums
         [Description("´Pix")]
         Pix = 3,
 
-        [Description("Promissria")]
-        Promissoria = 3
+        [Description("Promissória")]
+        Promissoria = 4,
+
+        [Description("Dinheiro")]
+        Dinheiro = 5,
+
 
     }
 }

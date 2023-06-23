@@ -1,4 +1,5 @@
-﻿@{
+﻿@using DedInfoservices.Enums;
+@{
     ViewData["Title"] = "Registrar Venda";
     Layout = "_Layout";
     string pedido = @ViewBag.Guuid_Carrinho;
@@ -76,7 +77,8 @@
 
         <div class="row mt-2 mb-4">
             <div class="col-sm-6">
-                <button type="button" class="btn btn-primary" onclick="finalizarVenda();">Finalizar Venda</button>
+                <button type="button" class="btn btn-primary" onclick="modalFormaPagamento();">Finalizar Venda</button>
+                <button type="button" class="btn btn-danger" onclick="modalFormaPagamento();">Cancelar Venda</button>
             </div>
         </div>
 
@@ -93,14 +95,48 @@
             <tbody></tbody>
             <tfoot class="table-info">
                 <tr>
-                    <th>Produto</th>
-                    <th>Valor</th>
-                    <th>Desconto (%)</th>
-                    <th>Valor Final</th>
-                    <th>Ação</th>
+                    <th>Valor Total Bruto</th>
+                    <th>@ViewBag.ValorBruto</th>
+                    <th>Valor Total Com Desconto</th>
+                    <th>@ViewBag.ValorAposDesconto</th>
+                    <th></th>
                 </tr>
             </tfoot>
         </table>
+    </div>
+
+    <div id="modalFormaPagamento" style="text-align:center; color:black">
+        <div class="modal fade" id="modal-forma-pagamento" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Forma de Pagamento</h4>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="form-group col-sm-12 ">
+                                <label for="forma-pagamento">Selecione a forma de pagamento (*)</label>
+                                <select id="forma-pagamento" name="forma-pagamento" class="form-select">
+                                    <option value="">Selecione...</option>
+                                    <option value="@TipoPagamentoEnum.Debito">Débito</option>
+                                    <option value="@TipoPagamentoEnum.Credito">Crédito</option>
+                                    <option value="@TipoPagamentoEnum.Pix">Pix</option>
+                                    <option value="@TipoPagamentoEnum.Promissoria">Promissória</option>
+                                    <option value="@TipoPagamentoEnum.Dinheiro">Dinheiro</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-finalizar-venda" class="btn btn-primary pull-right" onclick="finalizarVenda();">Finalizar Venda</button>
+                        <button type="button" class="btn btn-secondary pull-left" onclick="fecharModal();">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -203,7 +239,7 @@
         });
     }
 
-        function finalizarVenda() {
+    function finalizarVenda() {
         fechar_alerta();
         let Guuid_Carrinho = '@pedido';
 
@@ -212,7 +248,7 @@
             data: {
                 'Guuid_Carrinho': Guuid_Carrinho,
                 'Guuid_Cliente': $('#guuid_cliente').val(),
-                'Tipo_Pagamento': $('#select-tipo-pagamento').val(),
+                'Tipo_Pagamento': $('#forma-pagamento').val(),
             },
             url: '@Url.Action("FinalizarVenda", "Venda")',
             success: function (result) {
@@ -236,4 +272,42 @@
         });
     }
 
+    function modalFormaPagamento() {
+        $('#modal-forma-pagamento').modal('show');
+
+    }
+
+    function fecharModal() {
+        $('#modal-forma-pagamento').modal('hide');
+    }
+
+   function cancelarVenda() {
+        fechar_alerta();
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                'guuid_venda': $('#forma-pagamento').val(),
+            },
+            url: '@Url.Action("CancelarVenda", "Venda")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('#msgSucess-produto #sucessMsg-produto').html('Venda cancelada com sucesso.');
+                    $('#sucessModal-produto').show();
+
+                    listar();
+                }
+                else {
+                    $('#msgError-produto #erroMsg-produto').html(result.error);
+                    $('#errorModal-produto').show();
+                }
+            },
+            error: function (error)
+            {
+                $('#msgError-produto #erroMsg-produto').html(error.error);
+                $('#errorModal-produto').show();
+            },
+            datatype: 'json'
+        });
+   }
 </script>

@@ -7,8 +7,7 @@
 
 <section>
     <div class="text-center container">
-        <br />
-        <h2>Vendas</h2>
+        <h2>VENDAS</h2>
 
         <div>
             <div id="errorModal" style="display: none">
@@ -29,7 +28,7 @@
             </div>
         </div>
 
-        <div class="form-group mt-3 mb-3" style="display: table;">
+        <div class="form-group mt-1 mb-3" style="display: table;">
             <button onclick="modalExclusao();" type="button" class="btn btn-success" color:white;">Registrar Venda</button>
         </div>
 
@@ -143,5 +142,35 @@
     function fecharModal() {
         $('#modal-exclusao').modal('hide');
     }
+
+   function cancelarVenda(guuid_venda) {
+        fechar_alerta();
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                'guuid_venda': guuid_venda,
+            },
+            url: '@Url.Action("CancelarVenda", "Venda")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('#msgSucess-produto #sucessMsg-produto').html('Venda cancelada com sucesso.');
+                    $('#sucessModal-produto').show();
+
+                    listar();
+                }
+                else {
+                    $('#msgError-produto #erroMsg-produto').html(result.error);
+                    $('#errorModal-produto').show();
+                }
+            },
+            error: function (error)
+            {
+                $('#msgError-produto #erroMsg-produto').html(error.error);
+                $('#errorModal-produto').show();
+            },
+            datatype: 'json'
+        });
+   }
 
 </script>

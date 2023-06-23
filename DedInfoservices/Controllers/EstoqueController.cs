@@ -69,7 +69,7 @@ namespace DedInfoservices.Controllers
             bool is_action = false;
 
             try
-            {
+            { 
                 filter.Guuid_Usuario_Inclusao = CurrentUser.Guuid;
                 _produtoService.EntradaProduto(filter);
 

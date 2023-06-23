@@ -9,7 +9,7 @@ namespace DedInfoservices.Filters.Produto
     {
         public string Guuid { get; set; }
         public string Nome { get; set; }
-        public decimal Valor { get; set; }
+        public string Valor { get; set; }
         public long? Codigo_Barras { get; set; }
         public string Descricao { get; set; }
     }

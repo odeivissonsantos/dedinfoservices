@@ -88,7 +88,39 @@ namespace DedInfoservices.Services
 
             _context.SaveChanges();
 
+        }
+
+        public void CancelarVenda(string guuid_venda)
+        {
+            var query = _context.Venda.Where(x => x.Guuid_Venda == guuid_venda && !x.Sts_Exclusao).FirstOrDefault();
+
+            if (query != null)
+            {
+                List<Carrinho> listCarrinho = _context.Carrinho.Where(x => x.Guuid_Carrinho == query.Guuid_Carrinho && x.Sts_carrinho).ToList();
+
+               query.Sts_Exclusao = true;
+                _context.Venda.Update(query);
+
+                foreach (var item in listCarrinho)
+                {
+                    var queryProdutoEstoque = _context.ProdutoEstoque.Where(x => x.Guuid_Produto == item.Guuid_Produto).FirstOrDefault();
+                    
+                    if (queryProdutoEstoque != null)
+                    {
+                        queryProdutoEstoque.Quantidade++;
+                        queryProdutoEstoque.Dtc_Atualizacao = DateTime.Now;
+                    }
+
+                    _context.ProdutoEstoque.Update(queryProdutoEstoque);
+
+                }
+
+            }
+
+            _context.SaveChanges();
 
         }
+
+
     }
 }
