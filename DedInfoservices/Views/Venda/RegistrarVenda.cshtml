@@ -55,6 +55,7 @@
                     }
                 </select>
             </div>
+
             <div class="col-sm-2">
                 <input type="text" placeholder="desconto" id="desconto" name="desconto" class="form-control" />
             </div>
@@ -75,12 +76,17 @@
             </div>
         </div>
 
-        <div class="row mt-2 mb-4">
-            <div class="col-sm-6">
-                <button type="button" class="btn btn-primary" onclick="modalFormaPagamento();">Finalizar Venda</button>
-                <button type="button" class="btn btn-danger" onclick="modalFormaPagamento();">Cancelar Venda</button>
+        @if (!string.IsNullOrEmpty(pedido))
+        {
+            <div class="row mt-2 mb-4">
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-primary" onclick="modalFormaPagamento();">Finalizar Venda</button>
+                    <button type="button" class="btn btn-danger" onclick="cancelarCarrinho();">Cancelar Venda</button>
+                </div>
             </div>
-        </div>
+        }
+
+
 
         <table id="list_items" class="table table-bordered table-striped">
             <thead class="table-info">
@@ -257,6 +263,38 @@
                     $('#sucessModal').show();
                     window.location.href = '@Url.Action("Index", "Venda")';
 
+                }
+                else {
+                    $('#msgError #erroMsg').html(result.error);
+                    $('#errorModal').show();
+                }
+            },
+            error: function (error)
+            {
+                $('#msgError #erroMsg').html(error.error);
+                $('#errorModal').show();
+            },
+            datatype: 'json'
+        });
+    }
+
+    function cancelarCarrinho() {
+        fechar_alerta();
+
+        let Guuid_Carrinho = '@pedido';
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                'guuid_carrinho': Guuid_Carrinho,
+            },
+            url: '@Url.Action("ExcluirCarrinho", "Venda")',
+            success: function (result) {
+                if (result.is_action) {
+                    $('#msgSucess #sucessMsg').html('Carrinho cancelado com sucesso.');
+                    $('#sucessModal').show();
+
+                    window.location.reload();
                 }
                 else {
                     $('#msgError #erroMsg').html(result.error);

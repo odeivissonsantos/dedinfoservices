@@ -19,6 +19,9 @@ namespace DedInfoservices.Enums
         [Description("Dinheiro")]
         Dinheiro = 5,
 
+        [Description("N/C")]
+        NadaConsta = 6,
+
 
     }
 }

@@ -75,7 +75,7 @@ namespace DedInfoservices.Controllers
                 qtd_itens = x.Qtd_Itens,
                 tipo_pagamento = DescriptionEnum.GetEnumDescription((TipoPagamentoEnum)x.Tipo_Pagamento),
                 valor_total = "R$ " + x.Valor_Total.ToString().Replace(".", ","),
-                sts_venda = x.Sts_Venda ? "Pago" : "Não Pago",
+                sts_venda = !x.Sts_Exclusao ? "Concluída" : "Cancelada",
                 acao = !x.Sts_Exclusao ? $"<a href='#' type='button' class='btn btn-danger' onclick='cancelarVenda(\"{x.Guuid_Venda}\")'>Cancelar</a>" : $"<button type='button' class='btn btn-secondary'>Cancelar</button>"
             }).ToArray();
 
@@ -213,5 +213,28 @@ namespace DedInfoservices.Controllers
 
             return Json(new { is_action, error });
         }
+
+        public IActionResult ExcluirCarrinho(string guuid_carrinho)
+        {
+            string error = "";
+            bool is_action = false;
+
+            try
+            {
+                if (string.IsNullOrEmpty(guuid_carrinho)) throw new Exception("Adicione pelo menos 1 item no carrinho.");
+                is_action = _carrinhoService.ExcluirCarrinho(guuid_carrinho);
+
+                 if(!is_action) throw new Exception("Não foi possível cancelar esse carrinho.");
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+            }
+
+            return Json(new { is_action, error });
+        }
+
+
+
     }
 }

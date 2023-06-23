@@ -54,7 +54,9 @@ namespace DedInfoservices.Services
 
         public void FinalizarVenda(FinalizarVendaFilter filter)
         {
-            List<Carrinho> listCarrinho = _context.Carrinho.Where(x => x.Guuid_Carrinho == filter.Guuid_Carrinho && x.Sts_carrinho).ToList();
+            List<Carrinho> listCarrinho = _context.Carrinho.Where(x => x.Guuid_Carrinho == filter.Guuid_Carrinho).ToList();
+
+            List<Carrinho> itensAtivosCarrinho = listCarrinho.Where(x => !x.Sts_Exclusao_Produto).ToList();
 
             Venda venda = new()
             {
@@ -62,28 +64,30 @@ namespace DedInfoservices.Services
                 Guuid_Carrinho = filter.Guuid_Carrinho,
                 Guuid_Cliente = filter.Guuid_Cliente,
                 Guuid_Usuario_Inclusao = filter.Guuid_Usuario_Inclusao,
-                Valor_Total = listCarrinho.Select(x => x.Valor_Final).Sum(),
-                Qtd_Itens = listCarrinho.Count(),
+                Valor_Total = itensAtivosCarrinho.Select(x => x.Valor_Final).Sum(),
+                Qtd_Itens = itensAtivosCarrinho.Count(),
                 Tipo_Pagamento = filter.Tipo_Pagamento,
                 Sts_Venda = true        
             };
 
-
             _context.Venda.Add(venda);
 
-            foreach (var item in listCarrinho)
+            foreach (var item in itensAtivosCarrinho)
             {
                 var query = _context.ProdutoEstoque.Where(x => x.Guuid_Produto == item.Guuid_Produto).FirstOrDefault();
+
                 if(query != null)
                 {
                     query.Quantidade--;
                     query.Dtc_Atualizacao = DateTime.Now;
                 }
                 _context.ProdutoEstoque.Update(query);
+            }
 
-                item.Sts_carrinho = false;
+            foreach (var item in listCarrinho) 
+            {
+                item.Sts_Conclusao_Carrinho = true;
                 _context.Carrinho.Update(item);
-
             }
 
             _context.SaveChanges();
@@ -96,28 +100,35 @@ namespace DedInfoservices.Services
 
             if (query != null)
             {
-                List<Carrinho> listCarrinho = _context.Carrinho.Where(x => x.Guuid_Carrinho == query.Guuid_Carrinho && x.Sts_carrinho).ToList();
+                List<Carrinho> listCarrinho = _context.Carrinho.Where(x => x.Guuid_Carrinho == query.Guuid_Carrinho).ToList();
+                List<Carrinho> lisitensAtivotCarrinho = listCarrinho.Where(x => !x.Sts_Exclusao_Produto).ToList();
 
-               query.Sts_Exclusao = true;
+                query.Sts_Exclusao = true;
                 _context.Venda.Update(query);
 
-                foreach (var item in listCarrinho)
+                foreach (var item in lisitensAtivotCarrinho)
                 {
                     var queryProdutoEstoque = _context.ProdutoEstoque.Where(x => x.Guuid_Produto == item.Guuid_Produto).FirstOrDefault();
                     
                     if (queryProdutoEstoque != null)
                     {
                         queryProdutoEstoque.Quantidade++;
-                        queryProdutoEstoque.Dtc_Atualizacao = DateTime.Now;
+                        queryProdutoEstoque.Dtc_Atualizacao = DateTime.Now;                        
                     }
 
                     _context.ProdutoEstoque.Update(queryProdutoEstoque);
-
+                    
                 }
 
-            }
+                foreach (var item in listCarrinho)
+                {
 
-            _context.SaveChanges();
+                    item.Sts_Exclusao_Carrinho = true;
+                    _context.Carrinho.Update(item);
+                }
+
+                _context.SaveChanges();
+            }  
 
         }
 

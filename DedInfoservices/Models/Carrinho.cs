@@ -32,7 +32,16 @@ namespace DedInfoservices.Models
         [Column("valor_final")]
         public decimal Valor_Final { get; set; }
 
-        [Column("sts_carrinho")]
-        public bool Sts_carrinho { get; set; } = true;
+        [Column("sts_exclusao_carrinho")]
+        public bool Sts_Exclusao_Carrinho { get; set; } = false;
+
+        [Column("sts_exclusao_produto")]
+        public bool Sts_Exclusao_Produto { get; set; } = false;
+
+        [Column("dtc_inclusao")]
+        public DateTime Dtc_Inclusao { get; set; } = DateTime.Now;
+
+        [Column("sts_conclusao_carrinho")]
+        public bool Sts_Conclusao_Carrinho { get; set; } = false;
     }
 }
