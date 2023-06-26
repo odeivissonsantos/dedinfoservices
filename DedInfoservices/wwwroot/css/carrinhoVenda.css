@@ -1,0 +1,7 @@
+﻿.modal-dialog {
+    max-width: calc(100vw - 20%) !important;
+}
+
+#table-detalhes {
+    width: 100%;
+}

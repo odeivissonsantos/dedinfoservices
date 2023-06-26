@@ -79,7 +79,7 @@
                                 <span id="erroMsg-cliente"></span>
                             </div>
                         </div>
-                        <div id="sucessModal-cliente" style="display: none">
+                        <div id="sucessModal-cliente mt-1" style="display: none">
                             <div id="msgSucess-cliente" class="alert alert-success alert-dismissible fade show">
                                 <i class="fa fa-check"></i>
                                 <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
@@ -203,6 +203,7 @@
                     $('#sobrenome').val('');
                     $('#email').val('');
                     $('#telefone').val('');
+                    $('#is_whatsapp').prop('checked', false);
 
                     listar();
                 }

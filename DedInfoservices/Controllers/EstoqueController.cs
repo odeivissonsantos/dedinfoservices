@@ -39,9 +39,9 @@ namespace DedInfoservices.Controllers
                 produto = _produtoService.BuscarProduto(x.Guuid_Produto).Nome,
                 preco_compra = "R$ " + x.Preco_Compra.ToString().Replace(".", ","),
                 quantidade = x.Quantidade,
-                dtc_compra = x.Dtc_Compra.ToString("dd/MM/yyy HH:mm"),
-                dtc_recebimento = x.Dtc_Recebimento.ToString("dd/MM/yyy HH:mm"),
-                data_cadastro = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),
+                dtc_compra = x.Dtc_Compra.ToString("dd/MM/yyyy HH:mm"),
+                dtc_recebimento = x.Dtc_Recebimento.ToString("dd/MM/yyyy HH:mm"),
+                data_cadastro = x.Dtc_Inclusao.ToString("dd/MM/yyyy HH:mm"),
                 usuario_inclusao = _usuarioService.BuscarUsuario(2, x.Guuid_Usuario_Inclusao).Nome,
             }).ToArray();
 

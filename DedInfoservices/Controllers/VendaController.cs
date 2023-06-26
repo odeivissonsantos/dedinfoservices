@@ -54,7 +54,13 @@ namespace DedInfoservices.Controllers
 
             return View();
         }
-        
+
+        public IActionResult CarrinhoVenda(string guuid_venda)
+        {
+            CarrinhoVendaDTO carrinhoVenda = _vendaService.ListarItensCarrinho(guuid_venda);
+            return PartialView("_CarrinhoVenda", carrinhoVenda);
+        }
+
         [HttpPost]
         public virtual IActionResult VendasPagination(string sEcho, int iDisplayStart, int iColumns, int iDisplayLength, string sSearch)
         {
@@ -71,11 +77,12 @@ namespace DedInfoservices.Controllers
             var data = aList.Select(x => new
             {
                 nome_cliente = x.Nome_Cliente,
-                data_inclusao = x.Dtc_Inclusao.ToString("dd/MM/yyy HH:mm"),
+                data_inclusao = x.Dtc_Inclusao.ToString("dd/MM/yyyy HH:mm"),
                 qtd_itens = x.Qtd_Itens,
                 tipo_pagamento = DescriptionEnum.GetEnumDescription((TipoPagamentoEnum)x.Tipo_Pagamento),
                 valor_total = "R$ " + x.Valor_Total.ToString().Replace(".", ","),
                 sts_venda = !x.Sts_Exclusao ? "Concluída" : "Cancelada",
+                detalhes = $"<a href='#' type='button' class='btn btn-warning' onclick='modalDetalhes(\"{x.Guuid_Venda}\")'>Detalhes</a>",
                 acao = !x.Sts_Exclusao ? $"<a href='#' type='button' class='btn btn-danger' onclick='cancelarVenda(\"{x.Guuid_Venda}\")'>Cancelar</a>" : $"<button type='button' class='btn btn-secondary'>Cancelar</button>"
             }).ToArray();
 

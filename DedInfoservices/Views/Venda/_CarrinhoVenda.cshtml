@@ -1,0 +1,90 @@
+﻿@model DedInfoservices.DTOs.Venda.CarrinhoVendaDTO
+@{
+    ViewData["Title"] = "Detalhes do Carrinho";
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet" href="~/css/carrinhoVenda.css" />
+
+<section>
+    <div class="modal fade" id="modal-detalhes" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content modal-destalhes-venda">
+                <div class="modal-header">
+                    <h4 class="modal-title">Detalhes da Venda</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="reload()"></button>
+                </div>
+                <div class="modal-body" style="">
+
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <strong><label>Cliente: </label></strong> <span>@Model.Cliente </span>
+                            <br />
+                            <strong><label>Nº do Pedido: </label></strong> <span>@Model.Pedido </span>
+                            <br />
+                            <strong><label>Usuário de Inclusão: </label></strong> <span>@Model.UsuarioInclusao </span>
+                            <br />
+                            <strong><label>Data da Venda: </label></strong> <span>@Model.DataVenda </span>
+                            <br />
+                            <strong><label>Valor da Compra: </label></strong> <span> R$ @Model.ValorTotal </span>
+                            <br />
+                            <strong><label>Forma de Pagamento: </label></strong> <span>@Model.TipoPagamento </span>
+                        </div>
+                    </div>
+
+                    <section id="container-table">
+                        <table id="table-detalhes" class="table table-bordered table-striped mt-3">
+                            <thead class="table-info">
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Valor Unitário</th>
+                                    <th>Desconto (%)</th>
+                                    <th>Desconto (R$)</th>
+                                    <th>Valor Final</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Itens)
+                                {
+                                    <tr>
+                                        <td>@item.NomeProduto</td>
+                                        <td>@item.ValorUnitarioProduto</td>
+                                        <td>@item.PercentualDesconto </td>
+                                        <td>@item.ValorUnitarioDesconto</td>
+                                        <td>@item.ValorFinalPosDesconto</td>
+                                        <td>@item.StatusItem</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="table-info">
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Valor Unitário</th>
+                                    <th>Desconto (%)</th>
+                                    <th>Desconto (R$)</th>
+                                    <th>Valor Final</th>
+                                    <th>Status</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </section>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary pull-left" data-bs-dismiss="modal" aria-label="Close" onclick="reload()">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+
+    function reload() {
+        window.location.reload();
+    }
+</script>

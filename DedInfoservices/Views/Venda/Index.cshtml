@@ -41,6 +41,7 @@
                     <th>Forma Pagamento</th>
                     <th>Valor Total</th>
                     <th>Status</th>
+                    <th>Detalhes</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -53,6 +54,7 @@
                     <th>Forma Pagamento</th>
                     <th>Valor Total</th>
                     <th>Status</th>
+                    <th>Detalhes</th>
                     <th>Ação</th>
                 </tr>
             </tfoot>
@@ -97,6 +99,9 @@
     </div>
 </div>
 
+<div id="modalDetalhes">
+</div>
+
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -121,6 +126,7 @@
                 { 'mData': 'tipo_pagamento' },
                 { 'mData': 'valor_total' },
                 { 'mData': 'sts_venda' },
+                { 'mData': 'detalhes' },
                 { 'mData': 'acao' }
             ],
             "language": {
@@ -172,5 +178,25 @@
             datatype: 'json'
         });
    }
+
+    function modalDetalhes(guuid_venda) {
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                'guuid_venda': guuid_venda,
+            },
+            url: '@Url.Action("CarrinhoVenda", "Venda")',
+            success: function (result) {
+                $('#modalDetalhes').html(result);
+                $('#modal-detalhes').modal('show');
+            },
+            error: function (error) {
+                $('#msgError-produto #erroMsg-produto').html(error.error);
+                $('#errorModal-produto').show();
+            },
+            datatype: 'json'
+        });
+    }
 
 </script>

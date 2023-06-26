@@ -3,6 +3,7 @@ using DedInfoservices.DTOs.Venda;
 using DedInfoservices.Enums;
 using DedInfoservices.Filters.Venda;
 using DedInfoservices.Models;
+using DedInfoservices.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -130,6 +131,57 @@ namespace DedInfoservices.Services
                 _context.SaveChanges();
             }  
 
+        }
+
+        public CarrinhoVendaDTO ListarItensCarrinho(string guuid_venda)
+        {
+            CarrinhoVendaDTO carrinhoVenda = new();
+            var venda = _context.Venda.Where(x => x.Guuid_Venda == guuid_venda).FirstOrDefault();
+
+
+            if (venda != null)
+            {
+
+                var itensCarrinho = _context.Carrinho.Where(x => x.Guuid_Carrinho == venda.Guuid_Carrinho).ToList();
+
+                if(itensCarrinho.Any())
+                {
+                    foreach (var item in itensCarrinho)
+                    {
+                        var cliente = _context.Cliente.Where(x => x.Guuid == item.Guuid_Cliente).FirstOrDefault();
+                        var usuario = _context.Usuario.Where(x => x.Guuid == venda.Guuid_Usuario_Inclusao).FirstOrDefault();
+
+                        carrinhoVenda.Cliente = cliente.Nome + " " + cliente.Sobrenome;
+                        carrinhoVenda.DataVenda = venda.Dtc_Inclusao.ToString("dd/MM/yyyy HH:mm");
+                        carrinhoVenda.UsuarioInclusao = usuario.Nome + " " + usuario.Sobrenome;
+                        carrinhoVenda.TipoPagamento = DescriptionEnum.GetEnumDescription((TipoPagamentoEnum)venda.Tipo_Pagamento);
+                        carrinhoVenda.ValorTotal = venda.Valor_Total.ToString().Replace(".", ",");
+                        carrinhoVenda.Pedido = venda.Guuid_Carrinho;
+
+                    }
+
+                    foreach (var itemCarrinho in itensCarrinho)
+                    {
+                        string nomeProduto = _context.Produto.Where(x => x.Guuid == itemCarrinho.Guuid_Produto).Select(y => y.Nome).FirstOrDefault();
+
+                        ItensCarrinhoVendaDTO itens = new()
+                        {
+                            NomeProduto = nomeProduto,
+                            ValorUnitarioProduto = "R$ " + itemCarrinho.Produto_Valor_Unitario.ToString().Replace(".", ","),
+                            PercentualDesconto = $"{itemCarrinho.Desconto} %",
+                            ValorUnitarioDesconto = "R$ -" + (itemCarrinho.Produto_Valor_Unitario - itemCarrinho.Valor_Final).ToString().Replace(".", ","),
+                            ValorFinalPosDesconto = "R$ " + itemCarrinho.Valor_Final.ToString().Replace(".", ","),
+                            StatusItem = !itemCarrinho.Sts_Exclusao_Produto ? "" : "Item Cancelado"
+                        };
+
+                        carrinhoVenda.Itens.Add(itens);
+                    }
+
+                }
+              
+            }
+
+            return carrinhoVenda;
         }
 
 
