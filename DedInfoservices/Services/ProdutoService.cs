@@ -49,7 +49,7 @@ namespace DedInfoservices.Services
             if (produto == null) produto = new();
 
             produto.Nome = filter.Nome;
-            produto.Valor = decimal.Parse(filter.Valor);
+            produto.Valor = filter.Valor.Contains(".") ? decimal.Parse(filter.Valor.Replace(".", ",")) : decimal.Parse(filter.Valor.Replace(",", "."));
             produto.Codigo_Barras = filter.Codigo_Barras;
             produto.Codigo_Interno = new Random().Next(10000, 99999);
             produto.Descricao = filter.Descricao;
@@ -98,7 +98,7 @@ namespace DedInfoservices.Services
             {
                 Guuid_Produto = filter.Guuid_Produto,
                 Guuid_Usuario_Inclusao = filter.Guuid_Usuario_Inclusao,
-                Preco_Compra = decimal.Parse(filter.Preco_Compra),
+                Preco_Compra = filter.Preco_Compra.Contains(".") ? decimal.Parse(filter.Preco_Compra.Replace(".", ",")) : decimal.Parse(filter.Preco_Compra.Replace(",", ".")),
                 Dtc_Compra = filter.Dtc_Compra,
                 Dtc_Recebimento = filter.Dtc_Recebimento,
                 Quantidade = filter.Quantidade
