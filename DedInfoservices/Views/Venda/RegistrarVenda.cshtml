@@ -9,22 +9,22 @@
 
 <section>
     <div class="container">
-        <br />
-        <h2 class="text-center">Registrar Venda</h2>
+
+        <h2 class="text-center">REGISTRAR NOVA VENDA</h2>
 
         <div>
             <div id="errorModal" style="display: none">
-                <div id="msgError" class="alert alert-danger alert-dismissible fade show">
+                <div id="msgError" class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fa fa-ban"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
                     <span id="erroMsg"></span>
                 </div>
             </div>
             <div id="sucessModal" style="display: none">
-                <div id="msgSucess" class="alert alert-success alert-dismissible fade show">
+                <div id="msgSucess" class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="fa fa-check"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
                     <span id="sucessMsg"></span>
                 </div>
@@ -32,23 +32,22 @@
         </div>
 
         <div class="row mt-2 mb-2">
-            <div class="col-sm-1">
-                <label>Cliente:</label>
-            </div>
-
-            <div class="col-sm-3">
+            <div class="col-sm-12">
+                <strong><label>Cliente:</label></strong>
                 <input type="text" id="guuid_cliente" name="guuid_cliente" value="@ViewBag.Cliente.Guuid" style="display:none" />
                 <span>@ViewBag.Cliente.Nome @ViewBag.Cliente.Sobrenome</span>
             </div>
         </div>
 
         <div class="row mt-2 mb-2">
-            <div class="col-sm-1">
-                <label>Produtos:</label>
+            
+            <div class="col-xl-1">
+                <strong><label>Produto:</label></strong>
             </div>
 
-            <div class="col-sm-3">
+            <div class="col-xl-4">
                 <select id="select-produtos" class="form-select">
+                    <option value="">Selecione...</option>
                     @foreach (var item in @ViewBag.Produtos)
                     {
                         <option value="@item.Guuid">@item.Nome - R$ @item.Valor</option>
@@ -56,23 +55,19 @@
                 </select>
             </div>
 
-            <div class="col-sm-2">
-                <input type="text" placeholder="desconto" id="desconto" name="desconto" class="form-control" />
+            <div class="col-xl-1">
+                <input type="text" placeholder="desconto" id="desconto" name="desconto" maxlength="2" class="form-control" />
             </div>
 
-            <div class="col-sm-3">
+            <div class="col-xl-1">
                 <button type="button" class="btn btn-success" onclick="adicionarProduto();">Adicionar</button>
             </div>
-
         </div>
 
         <div class="row mt-2 mb-2">
-            <div class="col-sm-6">
-                <label>Pedido: </label> <span id="numero_pedido">@ViewBag.Guuid_Carrinho</span>
-            </div>
-
-            <div class="col-sm-3">
-                <span id="pedido"></span>
+            <div class="col-sm-12">
+                <strong><label>Nº do Pedido: </label></strong> <span id="numero_pedido">@ViewBag.Guuid_Carrinho</span>
+                    <span id="pedido"></span>
             </div>
         </div>
 
@@ -117,6 +112,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Forma de Pagamento</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
                     </div>
                     <div class="modal-body">
@@ -138,7 +134,6 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btn-finalizar-venda" class="btn btn-primary pull-right" onclick="finalizarVenda();">Finalizar Venda</button>
-                        <button type="button" class="btn btn-secondary pull-left" onclick="fecharModal();">Cancelar</button>
                     </div>
                 </div>
             </div>
@@ -180,7 +175,6 @@
     };
 
     function adicionarProduto() {
-        fechar_alerta();
         let Guuid_Carrinho = '@pedido';
 
         $.ajax({
@@ -216,8 +210,6 @@
     }
 
     function removerProduto(id) {
-        fechar_alerta();
-
         $.ajax({
             type: 'POST',
             data: {
@@ -246,7 +238,6 @@
     }
 
     function finalizarVenda() {
-        fechar_alerta();
         let Guuid_Carrinho = '@pedido';
 
         $.ajax({
@@ -279,8 +270,6 @@
     }
 
     function cancelarCarrinho() {
-        fechar_alerta();
-
         let Guuid_Carrinho = '@pedido';
 
         $.ajax({
@@ -315,13 +304,8 @@
 
     }
 
-    function fecharModal() {
-        $('#modal-forma-pagamento').modal('hide');
-    }
 
    function cancelarVenda() {
-        fechar_alerta();
-
         $.ajax({
             type: 'POST',
             data: {

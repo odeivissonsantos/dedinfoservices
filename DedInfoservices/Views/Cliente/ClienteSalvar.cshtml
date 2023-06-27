@@ -22,17 +22,17 @@
 
         <div>
             <div id="errorModal" style="display: none">
-                <div id="msgError" class="alert alert-danger alert-dismissible fade show">
+                <div id="msgError" class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fa fa-ban"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
                     <span id="erroMsg"></span>
                 </div>
             </div>
             <div id="sucessModal" style="display: none">
-                <div id="msgSucess" class="alert alert-success alert-dismissible fade show">
+                <div id="msgSucess" class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="fa fa-check"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
                     <span id="sucessMsg"></span>
                 </div>
@@ -111,7 +111,6 @@
 
 
     function salvarCliente() {
-        fechar_alerta();
 
         let guuid = '@novo' == "True" ? "" : $('#guuid').val();
 
@@ -150,11 +149,6 @@
             },
             datatype: 'json'
         });
-    }
-
-    function fechar_alerta() {
-        $('#errorModal').hide();
-        $('#sucessModal').hide();
     }
 
 </script>

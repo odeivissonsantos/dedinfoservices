@@ -138,7 +138,7 @@ namespace DedInfoservices.Controllers
             try
             {
                 Carrinho carrinho = new();
-                if (string.IsNullOrEmpty(filter.Guuid_Produto)) throw new Exception("Campo Guid é obrigatório.");
+                if (string.IsNullOrEmpty(filter.Guuid_Produto)) throw new Exception("Nenhum produto foi selecionado, tente novamente.");
 
                 var produto = _produtoService.BuscarProduto(filter.Guuid_Produto);
                 if (produto != null) carrinho = _carrinhoService.AdicionarProduto(filter, produto);

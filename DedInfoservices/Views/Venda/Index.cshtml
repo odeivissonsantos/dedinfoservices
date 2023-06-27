@@ -13,7 +13,7 @@
             <div id="errorModal" style="display: none">
                 <div id="msgError" class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fa fa-ban"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
                     <span id="erroMsg"></span>
                 </div>
@@ -21,7 +21,7 @@
             <div id="sucessModal" style="display: none">
                 <div id="msgSucess" class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="fa fa-check"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
                     <span id="sucessMsg"></span>
                 </div>
@@ -29,7 +29,7 @@
         </div>
 
         <div class="form-group mt-1 mb-3" style="display: table;">
-            <button onclick="modalExclusao();" type="button" class="btn btn-success" color:white;">Registrar Venda</button>
+            <button onclick="modalIniciarVenda();" type="button" class="btn btn-success" color:white;">Registrar Venda</button>
         </div>
 
         <table id="list_items" class="table table-bordered table-striped">
@@ -64,12 +64,13 @@
 
 </section>
 
-<div id="modalExclusao" style="text-align:center; color:black">
-    <div class="modal fade" id="modal-exclusao" tabindex="-1" role="dialog" aria-hidden="true">
+<div id="modalIniciarVenda" style="text-align:center; color:black">
+    <div class="modal fade" id="modal-iniciar-venda" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Iniciar Venda</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
                 </div>
                 <div class="modal-body">
@@ -91,8 +92,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="btn-confirmar-exclusao" class="btn btn-primary pull-right">Iniciar Venda</button>
-                    <button type="button" class="btn btn-secondary pull-left" onclick="fecharModal();">Não</button>
+                    <button id="btn-iniciar-venda" class="btn btn-primary pull-right">Iniciar Venda</button>
                 </div>
             </div>
         </div>
@@ -105,7 +105,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        $('#btn-confirmar-exclusao').on('click', iniciarVenda);
+        $('#btn-iniciar-venda').on('click', iniciarVenda);
         listar();
     });
 
@@ -135,8 +135,8 @@
         });
     };
 
-    function modalExclusao() {
-        $('#modal-exclusao').modal('show');
+    function modalIniciarVenda() {
+        $('#modal-iniciar-venda').modal('show');
 
     }
 
@@ -145,13 +145,8 @@
         window.location.href = `@Url.Action("RegistrarVenda", "Venda")?guuid_cliente=${guuid_cliente}`;
     }
 
-    function fecharModal() {
-        $('#modal-exclusao').modal('hide');
-    }
 
    function cancelarVenda(guuid_venda) {
-        fechar_alerta();
-
         $.ajax({
             type: 'POST',
             data: {

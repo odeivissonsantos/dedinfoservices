@@ -24,7 +24,7 @@
             <div id="errorModal" style="display: none">
                 <div id="msgError" class="alert alert-danger alert-dismissible fade show">
                     <i class="fa fa-ban"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
                     <span id="erroMsg"></span>
                 </div>
@@ -32,7 +32,7 @@
             <div id="sucessModal" style="display: none">
                 <div id="msgSucess" class="alert alert-success alert-dismissible fade show">
                     <i class="fa fa-check"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
                     <span id="sucessMsg"></span>
                 </div>
@@ -59,7 +59,7 @@
 
             <div class="form-group col-sm-6 mt-3">
                 <label for="valor">Valor Unitário (*)</label>
-                <input type="text" placeholder="Valor do Produto" id="valor" name="valor" value="@Model.Valor" class="form-control" maxlength="10" required>
+                <input type="text" placeholder="Valor do Produto" id="valor" name="valor" value="@Model.Valor.ToString().Replace(".", ",")" class="form-control" maxlength="10" required>
             </div>
 
             <div class="form-group col-sm-6 mt-3">
@@ -119,7 +119,6 @@
 
 
     function salvarProduto() {
-        fechar_alerta();
 
         let guuid = '@novo' == "True" ? "" : $('#guuid').val();
 
@@ -157,11 +156,6 @@
             },
             datatype: 'json'
         });
-    }
-
-    function fechar_alerta() {
-        $('#errorModal').hide();
-        $('#sucessModal').hide();
     }
 
 </script>

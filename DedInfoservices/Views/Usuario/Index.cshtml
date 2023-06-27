@@ -8,14 +8,14 @@
 
 <section>
     <div class="text-center container">
-        <br />
-        <h2>Usuários</h2>
+
+        <h2>USUÁRIOS</h2>
 
         <div>
             <div id="errorModal" style="display: none">
                 <div id="msgError" class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fa fa-ban"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
                     <span id="erroMsg"></span>
                 </div>
@@ -23,7 +23,7 @@
             <div id="sucessModal" style="display: none">
                 <div id="msgSucess" class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="fa fa-check"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
                     <span id="sucessMsg"></span>
                 </div>
@@ -31,7 +31,7 @@
         </div>
 
         <div class="form-group mt-3 mb-3" style="display: table;">
-            <button type="button" onclick="modalNovoUsuario();" class="btn btn-success" style="color:white;">Novo</button>
+            <button type="button" onclick="modalNovoUsuario();" class="btn btn-success">Novo Usuário</button>
         </div>
 
         <table id="list_items" class="table table-bordered table-striped">
@@ -69,21 +69,21 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="modal-title">Novo Usuário</h3>
-                        <button class="btn-close" id="fechar" onclick="modalfechar()"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="container col-sm-12 mt-1">
                         <div id="errorModal-novo-usuario" style="display: none">
                             <div id="msgError-novo-usuario" class="alert alert-danger alert-dismissible fade show">
                                 <i class="fa fa-ban"></i>
-                                <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 <span id="erroMsg-novo-usuario"></span>
                             </div>
                         </div>
                         <div id="sucessModal-novo-usuario" style="display: none">
                             <div id="msgSucess-novo-usuario" class="alert alert-success alert-dismissible fade show">
                                 <i class="fa fa-check"></i>
-                                <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 <span id="sucessMsg-novo-usuario"></span>
                             </div>
                         </div>

@@ -7,14 +7,13 @@
 
 <section>
     <div class="text-center container">
-        <br />
-        <h2>Clientes</h2>
+        <h2>CLIENTES</h2>
 
         <div>
             <div id="errorModal" style="display: none">
                 <div id="msgError" class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fa fa-ban"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
                     <span id="erroMsg"></span>
                 </div>
@@ -22,7 +21,7 @@
             <div id="sucessModal" style="display: none">
                 <div id="msgSucess" class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="fa fa-check"></i>
-                    <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
                     <span id="sucessMsg"></span>
                 </div>
@@ -30,7 +29,7 @@
         </div>
 
         <div class="form-group mt-3 mb-3" style="display: table;">
-            <button type="button" onclick="modalCliente()" class="btn btn-success" sstyle="color:white;">Novo</button>
+            <button type="button" onclick="modalCliente()" class="btn btn-success" sstyle="color:white;">Novo Cliente</button>
         </div>
 
         <table id="list_items" class="table table-bordered table-striped">
@@ -68,21 +67,21 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="modal-title">Novo Cliente</h3>
-                        <button class="btn-close" id="fechar" onclick="modalfechar()"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="container col-sm-12 mt-1">
                         <div id="errorModal-cliente" style="display: none">
                             <div id="msgError-cliente" class="alert alert-danger alert-dismissible fade show">
                                 <i class="fa fa-ban"></i>
-                                <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 <span id="erroMsg-cliente"></span>
                             </div>
                         </div>
                         <div id="sucessModal-cliente mt-1" style="display: none">
                             <div id="msgSucess-cliente" class="alert alert-success alert-dismissible fade show">
                                 <i class="fa fa-check"></i>
-                                <button class="btn-close" onclick="fechar_alerta();" aria-hidden="true" type="button"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 <span id="sucessMsg-cliente"></span>
                             </div>
                         </div>
@@ -176,14 +175,7 @@
         $('#modal-Cliente').modal('show');
     }
 
-    function modalfechar() {
-        $('#modal-Cliente').modal('hide');
-    }
-
-
     function SalvarCliente() {
-        fechar_alerta();
-
         $.ajax({
             type: 'POST',
             data: {
@@ -222,7 +214,6 @@
     }
 
     function reativar(guuid) {
-        fechar_alerta();
         $.ajax({
             type: 'POST',
             data: {
@@ -250,7 +241,6 @@
     }
 
     function desativar(guuid) {
-        fechar_alerta();
         $.ajax({
             type: 'POST',
             data: {
@@ -276,13 +266,5 @@
             datatype: 'json'
         });
     }
-
-    function fechar_alerta() {
-        $('#errorModal').hide();
-        $('#sucessModal').hide();
-        $('#errorModal-cliente').hide();
-        $('#sucessModal-cliente').hide();
-    }
-
 
 </script>
